@@ -5,7 +5,7 @@
    Then set your URL in chat.html CONFIG.CLOUDFLARE. */
 
 const ACCOUNT_ID = '5d7102fe95032b5979b68bad328cc6e9';
-const API_TOKEN = 'cfut_nL1baYbWdqtRNtB0qTkpaNIV90kA41v7HtHppzec744fbc06';
+const API_TOKEN = 'cfut_QpU6KpQPhCSP8zl2Li5HqteM2Q455LFu7w4z1zCu698cc93b';
 const MODEL = '@cf/black-forest-labs/flux-1-schnell';
 
 const CORS = {
