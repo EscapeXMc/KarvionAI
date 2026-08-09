@@ -1,0 +1,3250 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0" />
+<title>Karvion AI â€” Premium Assistant</title>
+<meta name="description" content="KarvionAI by EscapeX Inc Pvt. Limited â€” premium AI assistant with realtime cross-device sync. Chat, code, images, voice & more." />
+<meta name="theme-color" content="#A78BFA" />
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%237C3AED'/%3E%3Cstop offset='100%25' style='stop-color:%23C4B5FD'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpolygon points='50,2 97,27 97,73 50,98 3,73 3,27' fill='url(%23g)'/%3E%3Ctext x='50' y='65' text-anchor='middle' font-family='sans-serif' font-weight='900' font-size='48' fill='white'%3EK%3C/text%3E%3C/svg%3E" />
+<link rel="stylesheet" href="css/fonts.css?v=5" />
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
+<style>
+:root {
+  color-scheme: dark;
+  --bg: #0D0716; --bg-2: #161026; --bg-3: #211735;
+  --surface: rgba(255,255,255,0.04); --surface-2: rgba(255,255,255,0.07);
+  --green: #A78BFA; --green-dim: rgba(167,139,250,0.12); --green-glow: rgba(167,139,250,0.38);
+  --violet: #8B5CF6; --violet-dim: rgba(139,92,246,0.12);
+  --cyan: #C4B5FD; --cyan-dim: rgba(196,181,253,0.12);
+  --pink: #FF5E5B;
+  --gold: #DDD6FE; --gold-2: #C4B5FD; --gold-dim: rgba(221,214,254,0.14);
+  --orange: #A78BFA;
+  --wood-grad: linear-gradient(160deg, #1E1330 0%, #2E1F4A 48%, #170F26 100%);
+  --wood-line: rgba(196,181,253,0.16);
+  --brand-grad: linear-gradient(135deg, #7C3AED 0%, #A78BFA 55%, #C4B5FD 130%);
+  --text: #F3EEFF; --text-2: rgba(243,238,255,0.84); --text-3: rgba(243,238,255,0.63);
+  --border: rgba(255,255,255,0.08); --danger: #FF6B6B;
+  --sh-lux: 0 30px 70px -14px rgba(0,0,0,0.6), 0 10px 26px rgba(0,0,0,0.35);
+  --sh-soft: 0 14px 38px -10px rgba(0,0,0,0.45);
+  --sh-gold: 0 18px 48px -12px rgba(167,139,250,0.3);
+  --f-body: 'Space Grotesk', system-ui, sans-serif;
+  --f-display: 'Unbounded', 'Space Grotesk', sans-serif;
+  --f-luxury: 'Unbounded', 'Space Grotesk', sans-serif;
+  --f-mono: 'JetBrains Mono', monospace;
+  --r-lg: 16px; --r-md: 12px; --r-sm: 9px;
+  --ease: cubic-bezier(.22,.9,.28,1);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html,body { height:100%; }
+body {
+  font-family:var(--f-body); background:var(--bg); color:var(--text);
+  overflow:hidden; -webkit-font-smoothing:antialiased;
+  font-weight:700;
+}
+h1,h2,h3,h4,h5,h6 { font-family:var(--f-display); font-weight:800; }
+p, span, a, li, div, label { font-weight:600; }
+::-webkit-scrollbar { width:8px; height:8px; }
+::-webkit-scrollbar-thumb { background:rgba(167,139,250,0.25); border-radius:8px; }
+::-webkit-scrollbar-thumb:hover { background:rgba(167,139,250,0.45); }
+::selection { background:rgba(167,139,250,0.35); color:#fff; }
+button { font-family:inherit; cursor:pointer; }
+input,textarea,select { font-family:inherit; color:inherit; }
+
+/* â”€â”€ AUTH SCREEN â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.auth-overlay {
+  position:fixed; inset:0; z-index:200; display:none; align-items:center; justify-content:center;
+  background:
+    radial-gradient(ellipse 62% 50% at 12% 4%, rgba(167,139,250,0.14) 0%, transparent 62%),
+    radial-gradient(ellipse 48% 40% at 88% 88%, rgba(221,214,254,0.1) 0%, transparent 58%),
+    radial-gradient(ellipse 42% 46% at 60% 42%, rgba(196,181,253,0.09) 0%, transparent 66%),
+    var(--bg);
+}
+.auth-overlay.show { display:flex; }
+.auth-card {
+  width:min(420px, 92vw); background:rgba(19,13,7,0.94); border:1px solid rgba(196,181,253,0.28);
+  border-radius:20px; padding:36px 34px 30px; backdrop-filter:blur(20px);
+  box-shadow:var(--sh-lux), 0 0 0 1px rgba(196,181,253,0.06), 0 0 80px rgba(167,139,250,0.08);
+}
+.auth-brand { display:flex; align-items:center; gap:12px; justify-content:center; margin-bottom:8px; }
+.auth-logo {
+  width:46px; height:46px; border-radius:13px; background:var(--brand-grad);
+  display:flex; align-items:center; justify-content:center; font-family:var(--f-display);
+  font-weight:700; font-size:24px; color:#fff; box-shadow:0 8px 24px rgba(167,139,250,0.4), inset 0 1px 0 rgba(255,255,255,0.3);
+}
+.auth-brand-name { font-family:var(--f-display); font-size:24px; font-weight:500; letter-spacing:0.5px; }
+.auth-brand-name span { background:var(--brand-grad); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+.auth-tag { text-align:center; color:var(--text-2); font-size:13px; margin-bottom:24px; }
+.auth-tabs { display:flex; background:var(--surface); border-radius:11px; padding:4px; margin-bottom:22px; }
+.auth-tab { flex:1; border:none; background:transparent; color:var(--text-2); font-size:13.5px; font-weight:600; padding:9px 0; border-radius:8px; transition:all .25s var(--ease); }
+.auth-tab.active { background:var(--gold-dim); color:var(--gold); }
+.auth-field { margin-bottom:15px; }
+.auth-field label { display:block; font-size:12.5px; color:var(--text-2); font-weight:600; margin-bottom:7px; }
+.auth-field input {
+  width:100%; background:var(--bg-2); border:1px solid var(--border); border-radius:10px;
+  padding:12px 14px; font-size:14px; outline:none; transition:border-color .25s;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.03), var(--sh-soft);
+}
+.auth-field input:focus { border-color:var(--gold-2); box-shadow:0 0 0 3px var(--gold-dim); }
+.auth-err { display:none; font-size:12.5px; color:var(--danger); margin-bottom:12px; text-align:center; }
+.auth-err.show { display:block; }
+.auth-btn {
+  width:100%; border:none; border-radius:11px; padding:13px; font-size:14.5px; font-weight:700;
+  background:var(--brand-grad); color:#fff; box-shadow:0 10px 28px rgba(167,139,250,0.4), inset 0 1px 0 rgba(221,214,254,0.35);
+  transition:transform .2s var(--ease), box-shadow .2s; margin-bottom:14px;
+}
+.auth-btn:hover { transform:translateY(-1px); box-shadow:0 14px 34px rgba(167,139,250,0.4); }
+.auth-btn:disabled { opacity:.6; cursor:not-allowed; transform:none; }
+.auth-divider { display:flex; align-items:center; gap:12px; color:var(--text-3); font-size:12px; margin-bottom:14px; }
+.auth-divider::before,.auth-divider::after { content:''; flex:1; height:1px; background:var(--border); }
+.google-btn {
+  width:100%; display:flex; align-items:center; justify-content:center; gap:10px;
+  background:var(--bg-2); border:1px solid var(--border); border-radius:11px; padding:12px;
+  font-size:14px; font-weight:600; color:var(--text); transition:background .25s;
+}
+.google-btn:hover { background:var(--surface-2); }
+.google-btn svg { width:18px; height:18px; }
+.auth-sync-note { display:flex; align-items:center; justify-content:center; gap:7px; margin-top:16px; color:var(--text-3); font-size:12px; }
+.auth-sync-note i { color:var(--green); }
+
+/* â”€â”€ LAYOUT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.app { display:flex; height:100vh; width:100vw; }
+
+/* Sidebar */
+.sidebar {
+  width:282px; min-width:282px; height:100vh; background:var(--wood-grad);
+  border-right:1px solid var(--wood-line); display:flex; flex-direction:column; z-index:30;
+  transition:transform .35s var(--ease);
+}
+@media (min-width: 901px) {
+  .sidebar.hidden { transform:none; }
+}
+.side-logo { display:flex; align-items:center; gap:11px; padding:18px 18px 14px; }
+.side-logo .auth-logo { width:38px; height:38px; font-size:20px; border-radius:11px; }
+.side-logo .auth-brand-name { font-size:20px; }
+.new-chat-btn {
+  display:flex; align-items:center; justify-content:center; gap:9px; margin:6px 14px 12px;
+  background:var(--brand-grad); border:none; border-radius:12px; padding:11px; color:#fff;
+  font-size:14px; font-weight:700; box-shadow:0 10px 26px rgba(167,139,250,0.4), inset 0 1px 0 rgba(221,214,254,0.35); transition:all .25s var(--ease);
+}
+.new-chat-btn:hover { transform:translateY(-1px); box-shadow:0 14px 34px rgba(167,139,250,0.5); }
+.chat-search { margin:0 14px 10px; position:relative; }
+.chat-search input {
+  width:100%; background:rgba(0,0,0,0.35); border:1px solid var(--wood-line); border-radius:10px;
+  padding:9px 12px 9px 34px; font-size:13px; outline:none; color:var(--text-2);
+}
+.chat-search i { position:absolute; left:12px; top:50%; transform:translateY(-50%); font-size:12px; color:var(--text-3); }
+.chat-list { flex:1; overflow-y:auto; padding:0 10px 10px; }
+.chat-list-label { font-size:11px; text-transform:uppercase; letter-spacing:1.2px; color:var(--text-3); padding:8px 10px 6px; font-weight:700; }
+.chat-item {
+  display:flex; align-items:center; gap:10px; padding:10px 11px; border-radius:11px; cursor:pointer;
+  transition:background .2s; position:relative; margin-bottom:2px;
+}
+.chat-item:hover { background:rgba(255,255,255,0.05); }
+.chat-item.active { background:var(--gold-dim); box-shadow:inset 2px 0 0 var(--gold-2); }
+.chat-item .chat-icon {
+  width:32px; height:32px; min-width:32px; border-radius:9px; background:rgba(255,255,255,0.06);
+  display:flex; align-items:center; justify-content:center; color:var(--gold); font-size:13px;
+}
+.chat-item.active .chat-icon { background:var(--brand-grad); color:#fff; box-shadow:0 4px 14px rgba(167,139,250,0.35); }
+.chat-item .chat-info { flex:1; min-width:0; }
+.chat-item .chat-title { font-family:var(--f-display); font-size:13.5px; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.chat-item .chat-sub { font-size:11px; color:var(--text-3); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:2px; }
+.chat-item .chat-del { opacity:0; border:none; background:transparent; color:var(--text-3); font-size:13px; padding:5px; transition:all .2s; border-radius:6px; }
+.chat-item:hover .chat-del { opacity:1; }
+.chat-item .chat-del:hover { color:var(--danger); background:rgba(255,107,107,0.12); }
+.chat-empty { text-align:center; color:var(--text-3); font-size:12.5px; padding:26px 10px; line-height:1.6; }
+
+.side-footer { border-top:1px solid var(--wood-line); padding:12px 14px; }
+.sync-pill {
+  display:flex; align-items:center; gap:7px; font-size:11.5px; color:var(--text-2);
+  background:var(--gold-dim); border:1px solid var(--wood-line); border-radius:20px; padding:6px 11px; margin-bottom:10px; width:fit-content;
+}
+.sync-dot { width:8px; height:8px; border-radius:50%; background:var(--text-3); flex-shrink:0; transition:background .3s; }
+.sync-pill.live .sync-dot { background:var(--gold); box-shadow:0 0 8px rgba(221,214,254,0.8); animation:pulse 1.6s infinite; }
+.sync-pill.local .sync-dot { background:#A78BFA; }
+.sync-pill.offline .sync-dot { background:#FF6B6B; }
+@keyframes pulse { 0%,100% {opacity:1;} 50% {opacity:.4;} }
+.user-card { display:flex; align-items:center; gap:11px; }
+.user-card .avatar { width:38px; height:38px; border-radius:50%; background:var(--brand-grad); display:flex; align-items:center; justify-content:center; font-weight:800; color:#fff; font-size:15px; overflow:hidden; flex-shrink:0; }
+.user-card .avatar img { width:100%; height:100%; object-fit:cover; }
+.user-card .u-info { flex:1; min-width:0; }
+.user-card .u-name { font-size:13px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.user-card .u-mail { font-size:11px; color:var(--text-3); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.user-card .u-actions { display:flex; gap:5px; }
+.icon-btn { border:none; background:transparent; color:var(--text-2); width:32px; height:32px; border-radius:8px; font-size:14px; transition:all .2s; }
+.icon-btn:hover { background:var(--surface-2); color:var(--gold); }
+.icon-btn.danger:hover { color:var(--danger); }
+
+/* Main */
+.main { flex:1; display:flex; flex-direction:column; min-width:0; position:relative; height:100vh; }
+.topbar {
+  display:flex; align-items:center; gap:12px; padding:12px 18px; border-bottom:1px solid var(--wood-line);
+  background:rgba(10,7,3,0.72); backdrop-filter:blur(14px); z-index:20;
+}
+.menu-btn { display:none; }
+.top-title { flex:1; min-width:0; }
+.top-title h1 { font-family:var(--f-display); font-size:16px; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.top-title .top-sub { font-size:11.5px; color:var(--text-3); margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.top-actions { display:flex; align-items:center; gap:7px; }
+.picker-btn {
+  display:flex; align-items:center; gap:8px; background:var(--bg-2); border:1px solid var(--wood-line);
+  border-radius:10px; padding:8px 12px; font-size:12.5px; font-weight:600; color:var(--text-2); box-shadow:var(--sh-soft); transition:all .2s;
+}
+.picker-btn:hover { border-color:rgba(196,181,253,0.5); color:var(--gold); box-shadow:0 0 0 3px var(--gold-dim); }
+.picker-btn i { color:var(--green); }
+.picker-btn .pick-tag { font-size:9.5px; background:var(--green-dim); color:var(--gold); border-radius:6px; padding:2px 6px; font-weight:700; letter-spacing:.4px; }
+
+.chat-area { flex:1; overflow-y:auto; padding:22px 0 0; scroll-behavior:smooth; position:relative; }
+.chat-area-inner { max-width:860px; margin:0 auto; padding:0 20px 30px; }
+
+/* Welcome */
+.welcome-screen { text-align:center; padding:8vh 20px 40px; animation:fadeUp .5s var(--ease); }
+.welcome-logo { width:76px; height:76px; margin:0 auto 20px; border-radius:22px; background:var(--brand-grad); display:flex; align-items:center; justify-content:center; font-family:var(--f-display); font-weight:500; font-size:36px; color:#fff; box-shadow:0 16px 44px rgba(167,139,250,0.4), inset 0 1px 0 rgba(221,214,254,0.4); }
+.welcome-screen h2 { font-family:var(--f-display); font-size:clamp(26px,4vw,38px); font-weight:500; margin-bottom:8px; letter-spacing:0.3px; }
+.welcome-screen h2 span { background:var(--brand-grad); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+.welcome-screen .w-sub { color:var(--text-2); font-size:14.5px; margin-bottom:28px; }
+.quick-prompts { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; max-width:720px; margin:0 auto 26px; }
+.quick-chip {
+  background:var(--bg-2); border:1px solid var(--wood-line); border-radius:30px; padding:9px 16px;
+  font-size:13px; color:var(--text-2); transition:all .25s var(--ease); box-shadow:var(--sh-soft);
+}
+.quick-chip:hover { border-color:rgba(196,181,253,0.5); color:var(--gold); background:var(--gold-dim); transform:translateY(-1px); box-shadow:var(--sh-gold); }
+.welcome-models { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:10px; max-width:720px; margin:0 auto; }
+.model-card {
+  background:var(--bg-2); border:1px solid var(--border); border-radius:14px; padding:14px; text-align:left;
+  transition:all .25s var(--ease); display:flex; flex-direction:column; gap:5px;
+}
+.model-card:hover { border-color:rgba(167,139,250,0.5); transform:translateY(-2px); box-shadow:0 10px 26px rgba(167,139,250,0.12); }
+.model-card .m-top { display:flex; align-items:center; justify-content:space-between; }
+.model-card .m-name { font-size:13.5px; font-weight:700; }
+.model-card .m-tag { font-size:9.5px; background:var(--green-dim); color:var(--gold); border-radius:6px; padding:2px 6px; font-weight:700; }
+.model-card .m-desc { font-size:11.5px; color:var(--text-3); line-height:1.5; }
+.model-card.active { border-color:var(--green); box-shadow:0 0 0 1px rgba(167,139,250,0.4), 0 10px 26px rgba(167,139,250,0.15); }
+.model-online { display:inline-flex; align-items:center; gap:3px; font-family:var(--f-mono); font-size:9px; color:#2ECC71; background:rgba(46,204,113,0.12); border:1px solid rgba(46,204,113,0.35); border-radius:999px; padding:1px 6px; margin-left:4px; vertical-align:middle; letter-spacing:0.2px; white-space:nowrap; }
+
+/* Messages */
+.message-wrapper { display:flex; gap:12px; margin-bottom:22px; animation:fadeUp .35s var(--ease); }
+.message-wrapper.user { justify-content:flex-end; }
+.message-wrapper .avatar { width:36px; height:36px; min-width:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; overflow:hidden; }
+.message-wrapper.ai .avatar { background:var(--gold-dim); border:1px solid rgba(196,181,253,0.35); }
+.message-wrapper.user .avatar { background:var(--brand-grad); color:#fff; font-weight:800; font-size:13px; box-shadow:0 4px 12px rgba(167,139,250,0.3); }
+.message-wrapper.user .avatar img { width:100%; height:100%; object-fit:cover; }
+.msg-content { max-width:78%; min-width:0; }
+.message-wrapper.user .msg-content { display:flex; flex-direction:column; align-items:flex-end; }
+.msg-meta { display:flex; align-items:center; gap:8px; font-size:11px; color:var(--text-3); margin-bottom:5px; padding:0 4px; }
+.msg-name { font-weight:700; color:var(--text-2); font-size:11.5px; }
+.msg-time { opacity:.85; }
+.bubble { padding:12px 16px; border-radius:16px; font-size:14.5px; line-height:1.7; word-break:break-word; }
+.message-wrapper.ai .bubble { background:var(--bg-2); border:1px solid var(--wood-line); border-top-left-radius:6px; box-shadow:var(--sh-soft); }
+.message-wrapper.user .bubble { background:var(--brand-grad); color:#fff; border-top-right-radius:6px; box-shadow:0 10px 26px rgba(167,139,250,0.3), inset 0 1px 0 rgba(221,214,254,0.35); }
+.bubble p { margin:0 0 10px; }
+.bubble p:last-child { margin-bottom:0; }
+.bubble ul,.bubble ol { padding-left:20px; margin:0 0 10px; }
+.bubble ul li,.bubble ol li { margin-bottom:4px; }
+.bubble h1,.bubble h2,.bubble h3,.bubble h4 { margin:16px 0 8px; line-height:1.3; }
+.bubble h1 { font-size:20px; } .bubble h2 { font-size:17px; } .bubble h3 { font-size:15px; }
+.bubble a { color:var(--cyan); text-decoration:underline; }
+.bubble blockquote { border-left:3px solid var(--green); padding:2px 14px; margin:10px 0; color:var(--text-2); background:var(--surface); border-radius:0 8px 8px 0; }
+.bubble table { border-collapse:collapse; margin:12px 0; width:100%; font-size:13px; }
+.bubble th,.bubble td { border:1px solid var(--border); padding:8px 10px; text-align:left; }
+.bubble th { background:var(--surface-2); }
+.bubble hr { border:none; border-top:1px solid var(--border); margin:14px 0; }
+.bubble img.gen-img { max-width:100%; border-radius:12px; margin-top:10px; border:1px solid var(--border); cursor:zoom-in; opacity:0; transform:scale(0.88) translateY(14px); animation:genReveal 1.1s cubic-bezier(.22,.9,.28,1) forwards; box-shadow:0 0 0 rgba(52,211,153,0); }
+@keyframes genReveal {
+  0% { opacity:0; transform:scale(0.88) translateY(14px); filter:blur(12px); box-shadow:0 0 0 rgba(52,211,153,0); }
+  45% { opacity:1; filter:blur(0); box-shadow:0 0 46px rgba(52,211,153,0.5); transform:scale(1.02) translateY(0); }
+  100% { opacity:1; transform:scale(1) translateY(0); filter:blur(0); box-shadow:0 0 0 rgba(52,211,153,0); }
+}
+.bubble img.gen-img:hover { transform:scale(1.01); }
+.gen-img-actions { display:flex; gap:8px; margin-top:10px; opacity:0; animation:genActionsIn .5s ease .5s forwards; }
+@keyframes genActionsIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+.gen-dl-btn { border:none; background:var(--green-dim); color:var(--gold); font-size:12px; font-weight:700; padding:8px 14px; border-radius:9px; cursor:pointer; transition:all .2s; }
+.gen-dl-btn:hover { background:var(--gold); color:#000; transform:translateY(-1px); box-shadow:0 8px 22px rgba(167,139,250,0.35); }
+.bubble code.inline { background:rgba(167,139,250,0.14); color:var(--gold); padding:2px 7px; border-radius:6px; font-family:var(--f-mono); font-size:13px; }
+.code-block { background:#0d1117; border:1px solid rgba(255,255,255,0.08); border-radius:12px; margin:12px 0; overflow:hidden; }
+.code-block-header { display:flex; align-items:center; justify-content:space-between; padding:8px 14px; background:rgba(255,255,255,0.04); border-bottom:1px solid rgba(255,255,255,0.07); }
+.code-lang { font-size:11px; color:var(--text-3); font-weight:700; text-transform:uppercase; letter-spacing:.6px; }
+.code-copy-btn { border:none; background:transparent; color:var(--text-2); font-size:11.5px; font-weight:600; padding:4px 8px; border-radius:6px; transition:all .2s; }
+.code-copy-btn:hover { background:var(--surface-2); color:var(--gold); }
+.code-block pre { margin:0; padding:0; overflow-x:auto; }
+.code-block pre code { padding:14px 16px; font-family:var(--f-mono); font-size:13px; line-height:1.6; background:transparent !important; }
+.live-preview { border:1px solid rgba(167,139,250,0.3); border-radius:12px; margin:12px 0; overflow:hidden; background:var(--bg-2); }
+.live-preview-header { display:flex; align-items:center; justify-content:space-between; padding:8px 14px; background:var(--green-dim); }
+.live-preview-header span { font-size:11.5px; font-weight:700; color:var(--gold); }
+.live-preview iframe { width:100%; height:320px; border:none; background:#fff; }
+.gen-progress { display:flex; align-items:center; gap:12px; color:var(--text-2); font-size:13px; padding:10px 14px; border-radius:12px; background:linear-gradient(120deg, rgba(52,211,153,0.08), rgba(167,139,250,0.08), rgba(52,211,153,0.08)); background-size:220% 220%; animation:genSweep 1.8s ease infinite; border:1px solid rgba(52,211,153,0.2); }
+@keyframes genSweep { 0%,100% { background-position:0% 50%; } 50% { background-position:100% 50%; } }
+.gen-spinner { width:22px; height:22px; border:3px solid var(--green-dim); border-top-color:var(--green); border-right-color:var(--gold); border-radius:50%; animation:spin 0.7s cubic-bezier(.6,.15,.35,.85) infinite; flex-shrink:0; box-shadow:0 0 18px rgba(52,211,153,0.45); }
+@keyframes spin { to { transform:rotate(360deg); } }
+.gen-progress span { font-weight:700; letter-spacing:.2px; }
+.gen-progress::after { content:''; width:8px; height:8px; border-radius:50%; background:var(--green); margin-left:auto; box-shadow:0 0 12px var(--green); animation:blinkDot 1s ease infinite; }
+@keyframes blinkDot { 0%,100% { opacity:.35; } 50% { opacity:1; } }
+.error-block { color:#ffb4b4; }
+.error-block .error-title { font-weight:700; margin-bottom:6px; }
+.error-block .error-msg { font-size:13px; color:var(--text-2); margin-bottom:8px; }
+.msg-actions { display:flex; gap:4px; margin-top:6px; padding:0 2px; opacity:0; transition:opacity .2s; }
+.message-wrapper:hover .msg-actions { opacity:1; }
+.msg-action-btn { border:none; background:transparent; color:var(--text-3); font-size:11px; font-weight:600; padding:4px 7px; border-radius:6px; transition:all .2s; display:flex; align-items:center; gap:4px; }
+.msg-action-btn:hover { background:var(--surface-2); color:var(--gold); }
+.msg-action-btn.del:hover { color:var(--danger); }
+.msg-word-count, .reading-time { font-size:10.5px; color:var(--text-3); }
+
+/* Typing */
+.typing-wrapper { display:none; gap:12px; margin-bottom:22px; align-items:center; }
+.typing-wrapper.show { display:flex; }
+.typing-bubbles { display:flex; gap:5px; padding:15px 18px; background:var(--bg-2); border:1px solid var(--border); border-radius:16px; border-top-left-radius:6px; }
+.typing-bubbles span { width:8px; height:8px; border-radius:50%; background:var(--green); animation:typing 1.2s infinite; }
+.typing-bubbles span:nth-child(2) { animation-delay:.15s; }
+.typing-bubbles span:nth-child(3) { animation-delay:.3s; }
+@keyframes typing { 0%,60%,100% { transform:translateY(0); opacity:.4; } 30% { transform:translateY(-5px); opacity:1; } }
+
+/* Inline typing dots (inside the AI bubble while waiting) */
+.typing-dots { display:inline-flex; gap:5px; padding:5px 2px; }
+.typing-dots span { width:8px; height:8px; border-radius:50%; background:var(--green); animation:typing 1.2s infinite; box-shadow:0 0 8px rgba(167,139,250,0.55); }
+.typing-dots span:nth-child(2) { animation-delay:.15s; }
+.typing-dots span:nth-child(3) { animation-delay:.3s; }
+
+/* Live streaming caret */
+.stream-caret { display:inline-block; width:8px; height:15px; background:var(--green); margin-left:2px; vertical-align:-2px; border-radius:2px; animation:caretBlink .8s step-end infinite; box-shadow:0 0 6px rgba(167,139,250,0.6); }
+@keyframes caretBlink { 0%,100% { opacity:1; } 50% { opacity:0; } }
+
+/* Emoji quick bar + stop + starred */
+.emoji-bar { display:flex; gap:4px; padding:0 2px 6px; flex-wrap:wrap; }
+.emoji-btn { border:none; background:transparent; font-size:15px; padding:3px 5px; border-radius:7px; cursor:pointer; transition:all .15s; }
+.emoji-btn:hover { background:var(--surface-2); transform:scale(1.25); }
+.stop-btn { background:var(--danger) !important; }
+.message-wrapper.starred .bubble { box-shadow:0 0 0 1px rgba(251,191,36,0.45); }
+.msg-action-btn.star-on { color:var(--gold); }
+@keyframes hlPulse { 0% { box-shadow:0 0 0 0 rgba(167,139,250,0.55); } 50% { box-shadow:0 0 0 8px rgba(167,139,250,0); } 100% { box-shadow:0 0 0 0 rgba(167,139,250,0); } }
+
+/* â”€â”€ VOICE CHAT MODE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.voice-mode-card { display:none; position:fixed; inset:0; z-index:1200; align-items:center; justify-content:center; background:radial-gradient(120% 100% at 50% 0%, rgba(52,211,153,0.10) 0%, rgba(3,18,12,0.92) 55%, #010502 100%); backdrop-filter:blur(14px); }
+.voice-mode-card.show { display:flex; animation:vmFade .35s var(--ease); }
+@keyframes vmFade { from{opacity:0} to{opacity:1} }
+.vm-stage { position:relative; display:flex; flex-direction:column; align-items:center; gap:10px; width:min(480px, calc(100vw - 32px)); }
+.vm-orb-bg { position:absolute; top:80px; left:50%; transform:translateX(-50%); width:340px; height:340px; border-radius:50%; background:radial-gradient(circle, rgba(52,211,153,0.32) 0%, rgba(52,211,153,0.06) 55%, transparent 72%); filter:blur(6px); animation:vmBreath 4s ease-in-out infinite; pointer-events:none; }
+@keyframes vmBreath { 0%,100%{ transform:translateX(-50%) scale(1); opacity:.8 } 50%{ transform:translateX(-50%) scale(1.12); opacity:1 } }
+.vm-avatar { position:relative; width:220px; height:220px; z-index:2; border-radius:50%; overflow:hidden; background:radial-gradient(circle at 30% 20%, rgba(52,211,153,0.18), rgba(2,10,7,0.85)); border:1px solid rgba(52,211,153,0.28); box-shadow:0 0 80px rgba(52,211,153,0.22), inset 0 0 60px rgba(0,0,0,0.5); }
+#avatarCanvas { width:100%; height:100%; display:block; }
+.real-avatar { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; border-radius:50%; animation:realBreath 5s ease-in-out infinite; filter:saturate(1.05) contrast(1.03); }
+@keyframes realBreath { 0%,100% { transform:scale(1); } 50% { transform:scale(1.035); } }
+.real-avatar.speaking { animation:realTalk 0.9s ease-in-out infinite; }
+@keyframes realTalk { 0%,100% { transform:scale(1) translateY(0); } 25% { transform:scale(1.02) translateY(1.5px); } 50% { transform:scale(1.045) translateY(-1px); } 75% { transform:scale(1.02) translateY(1px); } }
+.real-avatar.real-talking { animation:realTalk 0.34s ease-in-out; }
+.vm-orb { display:none; position:absolute; inset:0; align-items:center; justify-content:center; z-index:3; }
+.vm-orb-pulse { width:120px; height:120px; border-radius:50%; background:radial-gradient(circle at 35% 30%, #ccfbf1, #34d399 55%, #047857); box-shadow:0 0 70px rgba(52,211,153,0.9), inset 0 -12px 32px rgba(0,0,0,0.28); animation:orbPulse 2s ease-in-out infinite; }
+.vm-orb.speaking .vm-orb-pulse { animation:orbTalk 0.5s ease-in-out infinite; }
+.vm-orb.blip .vm-orb-pulse { animation:orbBlip 0.32s ease-out; }
+@keyframes orbPulse { 0%,100% { transform:scale(1); } 50% { transform:scale(1.16); } }
+@keyframes orbTalk { 0%,100% { transform:scale(1); } 50% { transform:scale(1.3); } }
+@keyframes orbBlip { 0% { transform:scale(1); } 40% { transform:scale(1.5); } 100% { transform:scale(1); } }
+.vm-wave { display:flex; align-items:center; gap:5px; height:38px; margin-top:6px; z-index:2; }
+.vm-wave span { width:5px; border-radius:3px; background:linear-gradient(180deg, #6EE7B7, #059669); height:8px; }
+.vm-wave.listening span { animation:vmWave 0.9s ease-in-out infinite; }
+.vm-wave.speaking span { animation:vmWave 0.55s ease-in-out infinite; }
+.vm-wave span:nth-child(1){animation-delay:0s} .vm-wave span:nth-child(2){animation-delay:.1s} .vm-wave span:nth-child(3){animation-delay:.2s} .vm-wave span:nth-child(4){animation-delay:.3s} .vm-wave span:nth-child(5){animation-delay:.15s} .vm-wave span:nth-child(6){animation-delay:.25s} .vm-wave span:nth-child(7){animation-delay:.05s} .vm-wave span:nth-child(8){animation-delay:.35s} .vm-wave span:nth-child(9){animation-delay:.2s} .vm-wave span:nth-child(10){animation-delay:.3s}
+@keyframes vmWave { 0%,100%{ height:6px } 50%{ height:30px } }
+.vm-glass { width:100%; z-index:2; background:rgba(255,255,255,0.045); border:1px solid rgba(255,255,255,0.12); border-radius:22px; padding:18px 20px; backdrop-filter:blur(18px); box-shadow:0 24px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08); text-align:center; }
+.vm-title { font-weight:700; font-size:16px; color:var(--text); letter-spacing:.3px; display:inline-flex; align-items:center; gap:8px; }
+.vm-dot { width:10px; height:10px; border-radius:50%; background:#34D399; box-shadow:0 0 12px rgba(52,211,153,0.9); animation:vmBlink 1.2s infinite; display:inline-block; }
+@keyframes vmBlink { 0%,100% { opacity:1; } 50% { opacity:.3; } }
+.vm-sub { font-size:11.5px; color:var(--text-3); margin-top:3px; letter-spacing:.4px; text-transform:uppercase; }
+.vm-transcript { font-size:15px; line-height:1.6; color:var(--text); margin-top:14px; min-height:46px; max-height:120px; overflow-y:auto; white-space:pre-wrap; word-break:break-word; }
+.vm-status { font-size:12.5px; color:var(--green); margin-top:10px; font-weight:600; letter-spacing:.3px; }
+.vm-btns { margin-top:16px; display:flex; justify-content:center; gap:10px; }
+.vm-btn { display:inline-flex; align-items:center; gap:8px; background:rgba(255,107,107,0.14); color:#FF6B6B; border:1px solid rgba(255,107,107,0.35); padding:11px 24px; border-radius:30px; font-size:14px; font-weight:700; cursor:pointer; transition:.22s; }
+.vm-btn-cam { background:rgba(52,211,153,0.14); color:#34d399; border-color:rgba(52,211,153,0.35); }
+.vm-btn-cam.active { background:rgba(52,211,153,0.4); box-shadow:0 0 18px rgba(52,211,153,0.6); }
+.vm-cam-video { display:none; position:absolute; top:12px; right:12px; width:150px; height:110px; object-fit:cover; border-radius:16px; border:2px solid rgba(52,211,153,0.7); box-shadow:0 10px 28px rgba(0,0,0,0.6); background:#000; z-index:5; transform:scaleX(-1); }
+.vm-cam-video.show { display:block; }
+.vm-btn:hover { background:rgba(255,107,107,0.24); transform:translateY(-2px); box-shadow:0 12px 28px rgba(255,107,107,0.25); }
+.vm-btn-silent { background:rgba(255,255,255,0.06); color:var(--text-2); border-color:rgba(255,255,255,0.14); }
+#voiceChatBtn.active { color:var(--green); border-color:var(--green); background:var(--green-dim); box-shadow:0 0 14px var(--green-glow); }
+@media (max-width:480px) { .vm-avatar { width:170px; height:170px; } .vm-orb-bg { width:260px; height:260px; top:60px; } }
+
+
+
+/* Composer */
+.composer-wrap { padding:10px 18px 16px; background:linear-gradient(180deg, transparent, var(--bg) 30%); }
+.composer-wrap .sticky-bottom-ad { position: relative; left:0; right:0; box-shadow:none; border:0; background:transparent; padding:6px 0 10px; }
+.composer { max-width:860px; margin:0 auto; background:var(--bg-2); border:1px solid var(--wood-line); border-radius:18px; padding:10px 12px 8px; box-shadow:0 14px 44px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.03); transition:border-color .25s, box-shadow .25s; }
+.composer:focus-within { border-color:rgba(196,181,253,0.55); box-shadow:0 0 0 3px var(--gold-dim), 0 12px 40px rgba(0,0,0,0.4); }
+.composer textarea {
+  width:100%; background:transparent; border:none; outline:none; resize:none; font-size:15px;
+  line-height:1.6; color:var(--text); min-height:30px; max-height:180px;
+}
+.composer textarea::placeholder { color:var(--text-3); }
+.composer-bar { display:flex; align-items:center; gap:6px; margin-top:6px; }
+.composer-btn { border:none; background:transparent; color:var(--text-3); width:36px; height:36px; border-radius:10px; font-size:15px; transition:all .2s; }
+.composer-btn:hover { background:var(--surface-2); color:var(--gold); }
+.composer-btn.active { color:var(--pink); }
+.composer-hint { flex:1; font-size:11px; color:var(--text-3); padding-left:6px; }
+.send-btn { border:none; width:38px; height:38px; border-radius:12px; background:var(--brand-grad); color:#fff; font-size:15px; box-shadow:0 10px 24px rgba(167,139,250,0.35), inset 0 1px 0 rgba(221,214,254,0.4); transition:all .2s; }
+.send-btn:hover { transform:translateY(-1px); box-shadow:0 14px 30px rgba(167,139,250,0.48); }
+.send-btn:disabled { opacity:.45; cursor:not-allowed; transform:none; box-shadow:none; }
+.file-previews { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:8px; }
+.file-pill { display:flex; align-items:center; gap:8px; background:var(--bg-3); border:1px solid var(--border); border-radius:9px; padding:6px 10px; font-size:12px; color:var(--text-2); }
+.file-pill i { color:var(--green); }
+.file-pill button { border:none; background:transparent; color:var(--text-3); font-size:12px; }
+.file-pill button:hover { color:var(--danger); }
+
+/* Dropdowns */
+.dropdown { position:relative; }
+.dropdown-menu {
+  position:absolute; right:0; top:calc(100% + 8px); width:300px; background:rgba(19,13,7,0.98);
+  border:1px solid var(--wood-line); border-radius:14px; box-shadow:var(--sh-lux);
+  padding:8px; z-index:60; display:none; max-height:60vh; overflow-y:auto; backdrop-filter:blur(20px);
+}
+.dropdown.open .dropdown-menu { display:block; animation:fadeUp .25s var(--ease); }
+.dd-item { display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:10px; cursor:pointer; transition:background .2s; }
+.dd-item:hover { background:var(--surface-2); }
+.dd-item.active { background:var(--gold-dim); }
+.dd-item .dd-icon { width:32px; height:32px; min-width:32px; border-radius:9px; background:var(--surface-2); display:flex; align-items:center; justify-content:center; font-size:14px; }
+.dd-item.active .dd-icon { background:var(--brand-grad); color:#fff; box-shadow:0 4px 14px rgba(167,139,250,0.35); }
+.dd-item .dd-main { flex:1; min-width:0; }
+.dd-item .dd-name { font-family:var(--f-display); font-size:13.5px; font-weight:500; }
+.dd-item .dd-sub { font-size:11px; color:var(--text-3); }
+.dd-item .dd-tag { font-size:9.5px; background:var(--green-dim); color:var(--gold); border-radius:6px; padding:2px 6px; font-weight:700; }
+.dd-section { font-size:10.5px; text-transform:uppercase; letter-spacing:1px; color:var(--text-3); padding:10px 12px 5px; font-weight:800; }
+
+/* Toast */
+.toast-container { position:fixed; top:18px; right:18px; z-index:500; display:flex; flex-direction:column; gap:10px; }
+.toast { display:flex; align-items:center; gap:10px; background:rgba(19,13,7,0.96); border:1px solid var(--wood-line); border-left:3px solid var(--brand-grad); border-radius:12px; padding:12px 16px; font-size:13px; font-weight:600; box-shadow:var(--sh-lux); animation:slideIn .3s var(--ease); max-width:340px; }
+.toast i { color:var(--green); }
+.toast.success { border-left-color:var(--gold); } .toast.success i { color:var(--gold); }
+.toast.error { border-left-color:var(--danger); } .toast.error i { color:var(--danger); }
+@keyframes slideIn { from { transform:translateX(30px); opacity:0; } to { transform:none; opacity:1; } }
+@keyframes fadeUp { from { transform:translateY(12px); opacity:0; } to { transform:none; opacity:1; } }
+
+/* Mobile */
+@media (max-width: 900px) {
+  .menu-btn { display:block; }
+  .sidebar { position:fixed; left:0; top:0; box-shadow:0 0 60px rgba(0,0,0,0.6); }
+  .sidebar.hidden { transform:translateX(-100%); }
+  .sidebar-backdrop { position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:25; display:none; }
+  .sidebar-backdrop.show { display:block; }
+  .picker-btn .pick-tag { display:none; }
+  .msg-content { max-width:88%; }
+  .msg-actions { opacity:1; }
+}
+
+@media (max-width: 600px) {
+  .app, .main { height:100dvh; }
+  .topbar { padding:10px 12px; gap:8px; }
+  .picker-btn { padding:8px 9px; gap:6px; }
+  #modelBtnLabel, #personaBtnLabel { display:none; }
+  .dropdown-menu { width:min(300px, calc(100vw - 16px)); max-width:calc(100vw - 16px); }
+  .top-actions > .dropdown:nth-child(1) .dropdown-menu { left:0; right:auto; }
+  .toast-container { left:12px; right:12px; top:calc(12px + env(safe-area-inset-top)); }
+  .toast { max-width:none; width:100%; }
+  .chat-area { padding-top:14px; }
+  .chat-area-inner { padding:0 12px 24px; }
+  .welcome-screen { padding:5vh 12px 26px; }
+  .composer-wrap { padding:10px 12px calc(12px + env(safe-area-inset-bottom)); }
+  .composer-bar { gap:4px; }
+  .composer-btn { width:34px; height:34px; }
+  .send-btn { width:36px; height:36px; }
+  .welcome-screen > iframe, .composer-wrap > iframe, .sidebar-ad iframe { max-width:100%; }
+}
+
+@media (max-width: 420px) {
+  .composer-hint, #charCount, .top-sub { display:none; }
+  .settings-modal { width:100vw; max-height:100dvh; border-radius:0; }
+  .set-row input[type=range] { width:130px; }
+  .welcome-logo { width:64px; height:64px; font-size:30px; }
+}
+
+/* â”€â”€ SETTINGS MODAL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.bubble { font-size:var(--msg-fs,14px); }
+html.reduce-motion *, html.reduce-motion *::before, html.reduce-motion *::after { animation-duration:0.01ms !important; transition-duration:0.01ms !important; }
+.settings-overlay {
+  position:fixed; inset:0; z-index:300; display:none; align-items:center; justify-content:center;
+  background:rgba(0,0,0,0.55); backdrop-filter:blur(6px);
+}
+.settings-overlay.show { display:flex; }
+.settings-modal {
+  width:min(560px, 94vw); max-height:88vh; display:flex; flex-direction:column;
+  background:var(--bg-2); border:1px solid var(--border); border-radius:18px;
+  box-shadow:var(--sh-lux); overflow:hidden;
+}
+.settings-head { display:flex; align-items:center; justify-content:space-between; padding:16px 20px; border-bottom:1px solid var(--border); }
+.settings-head h2 { font-size:17px; display:flex; align-items:center; gap:10px; }
+.settings-head h2 i { color:var(--green); }
+.settings-body { flex:1; overflow-y:auto; padding:6px 20px 22px; }
+.settings-section { padding:18px 0; border-bottom:1px solid var(--border); }
+.settings-section:last-child { border-bottom:none; }
+.settings-title { font-size:12.5px; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--green); margin-bottom:14px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.settings-hint { font-size:11px; color:var(--text-3); text-transform:none; letter-spacing:0; font-weight:500; }
+.set-row { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:9px 0; }
+.set-info { flex:1; min-width:0; }
+.set-name { font-size:14px; color:var(--text); }
+.set-desc { font-size:12px; color:var(--text-3); margin-top:2px; }
+.set-row input[type=range] { width:180px; accent-color:var(--green); }
+.seg { display:flex; background:var(--surface); border:1px solid var(--border); border-radius:9px; padding:3px; }
+.seg button { border:none; background:transparent; color:var(--text-2); font-size:13px; padding:5px 13px; border-radius:7px; font-weight:600; }
+.seg button.active { background:var(--brand-grad); color:#fff; }
+.switch { position:relative; width:42px; height:23px; flex-shrink:0; }
+.switch input { opacity:0; width:0; height:0; }
+.switch .slider { position:absolute; inset:0; background:var(--surface-2); border:1px solid var(--border); border-radius:20px; cursor:pointer; transition:all .25s var(--ease); }
+.switch .slider::before { content:''; position:absolute; width:17px; height:17px; left:2px; top:2px; border-radius:50%; background:var(--text-3); transition:all .25s var(--ease); }
+.switch input:checked + .slider { background:var(--green); border-color:var(--green); }
+.switch input:checked + .slider::before { transform:translateX(19px); background:#fff; }
+.theme-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(96px,1fr)); gap:9px; }
+.theme-item {
+  border:2px solid var(--border); border-radius:11px; padding:8px; cursor:pointer; text-align:left;
+  background:var(--bg-3); transition:border-color .2s, transform .2s; overflow:hidden;
+}
+.theme-item:hover { transform:translateY(-2px); }
+.theme-item.active { border-color:var(--green); box-shadow:0 0 0 1px var(--green); }
+.theme-swatch { height:38px; border-radius:7px; margin-bottom:7px; border:1px solid rgba(0,0,0,0.15); }
+.theme-name { font-size:11.5px; color:var(--text-2); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+/* â”€â”€ AD SLOTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.ad-slot { display:flex; justify-content:center; align-items:center; text-align:center; overflow:hidden; position:relative; }
+.ad-slot iframe { max-width:100%; }
+.ad-slot-728 { width:100%; max-width:728px; min-height:90px; margin:0 auto; }
+.ad-slot-300 { width:300px; max-width:100%; height:250px; margin:0 auto; }
+.ad-slot-160 { width:160px; height:600px; margin:0 auto; }
+.ad-rail { display:none; width:180px; min-width:180px; height:100vh; align-items:center; justify-content:center; padding:16px 0; background:var(--bg); border-left:1px solid var(--border); overflow:hidden; }
+@media (min-width: 1366px) { .ad-rail { display:flex; } }
+@media (max-width: 600px) {
+  .ad-slot-728 { min-height:110px; }
+}
+
+/* â”€â”€ SMALL AD GRID â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.ad-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:10px; }
+.ad-grid .ad-slot { background:var(--bg-2); border:1px solid var(--border); border-radius:10px; min-height:80px; }
+.ad-grid .ad-slot iframe { border-radius:6px; }
+
+/* â”€â”€ SIDEBAR AD â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.sidebar-ad { padding:10px 14px; border-top:1px solid var(--wood-line); }
+.sidebar-ad .ad-slot { background:var(--bg-2); border:1px solid var(--wood-line); border-radius:10px; min-height:90px; }
+</style>
+  <script src="js/themes.js?v=3"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="js/avatar.js?v=3"></script>
+  <script src="js/firebase.js?v=4"></script>
+</head>
+<body>
+
+<!-- â•â• AUTH SCREEN â•â• -->
+<div class="auth-overlay show" id="authOverlay">
+  <div class="auth-card">
+    <div class="auth-brand">
+      <div class="auth-logo">K</div>
+      <div class="auth-brand-name"><span>Karvion</span> AI</div>
+    </div>
+    <p class="auth-tag">Sign in to sync your chats across every device â€” instantly.</p>
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tabLogin" onclick="switchAuthTab('login')">Sign In</button>
+      <button class="auth-tab" id="tabRegister" onclick="switchAuthTab('register')">Create Account</button>
+    </div>
+    <div class="auth-err" id="authErr"></div>
+    <div id="loginForm">
+      <div class="auth-field"><label>Email</label><input type="email" id="authEmail" placeholder="you@example.com" autocomplete="email" /></div>
+      <div class="auth-field"><label>Password</label><input type="password" id="authPass" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" autocomplete="current-password" /></div>
+      <button class="auth-btn" id="authSubmitBtn" onclick="submitAuth()">Sign In</button>
+    </div>
+    <div id="registerForm" style="display:none">
+      <div class="auth-field"><label>Display name</label><input type="text" id="authName" placeholder="Your name" autocomplete="name" /></div>
+      <div class="auth-field"><label>Email</label><input type="email" id="authEmail2" placeholder="you@example.com" autocomplete="email" /></div>
+      <div class="auth-field"><label>Password</label><input type="password" id="authPass2" placeholder="At least 6 characters" autocomplete="new-password" /></div>
+      <button class="auth-btn" id="authSubmitBtn2" onclick="submitAuth(true)">Create Account</button>
+    </div>
+    <div class="auth-divider">OR CONTINUE WITH</div>
+    <button class="google-btn" onclick="signInWithGoogle()">
+      <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+      Continue with Google
+    </button>
+    <div class="auth-sync-note"><i class="fa-solid fa-satellite-dish"></i> Sign in to sync your chats across every device â€” free forever</div>
+  </div>
+</div>
+
+<!-- â•â• APP â•â• -->
+<div class="app" id="app" style="display:none">
+  <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="toggleSidebar(false)"></div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar hidden" id="sidebar">
+    <div class="side-logo">
+      <div class="auth-logo">K</div>
+      <div class="auth-brand-name"><span>Karvion</span> AI</div>
+    </div>
+    <button class="new-chat-btn" onclick="startNewChat()"><i class="fa-solid fa-plus"></i> New Chat</button>
+    <div class="chat-search"><i class="fa-solid fa-magnifying-glass"></i><input type="text" id="chatSearchInput" placeholder="Search chats..." oninput="renderChatList()" /></div>
+    <div class="chat-list" id="chatList"></div>
+    <div class="sidebar-ad">
+      <iframe style="border:0;display:block;width:160px;height:300px;max-width:100%" srcdoc='<!DOCTYPE html><html><head><style>html,body{margin:0;padding:0}</style></head><body style="margin:0;padding:0"><script>atOptions={"key":"92f2fe2f645c57bf3a2417b96214565b","format":"iframe","height":300,"width":160,"params":{}};</script><script>(function(){var s=document.createElement("script");s.src="https://www.highperformanceformat.com/92f2fe2f645c57bf3a2417b96214565b/invoke.js";document.currentScript&&document.currentScript.parentNode&&document.currentScript.parentNode.insertBefore(s,document.currentScript.nextSibling);})();</script></body></html>'></iframe>
+    </div>
+    <div class="side-footer">
+      <div class="sync-pill offline" id="syncPill"><span class="sync-dot"></span><span id="syncText">Connectingâ€¦</span></div>
+      <div class="user-card">
+        <div class="avatar" id="userAvatar">U</div>
+        <div class="u-info">
+          <div class="u-name" id="userName">User</div>
+          <div class="u-mail" id="userMail"></div>
+        </div>
+        <div class="u-actions">
+          <button class="icon-btn" title="Back to website" onclick="location.href='index.html'"><i class="fa-solid fa-globe"></i></button>
+          <button class="icon-btn danger" title="Sign out" onclick="signOutUser()"><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+    <div class="topbar">
+      <button class="icon-btn menu-btn" onclick="toggleSidebar(true)"><i class="fa-solid fa-bars"></i></button>
+      <div class="top-title">
+        <h1 id="topTitle">Welcome</h1>
+        <div class="top-sub" id="topSub">New conversation</div>
+      </div>
+      <div class="top-actions">
+        <div class="dropdown">
+          <button class="picker-btn" onclick="toggleDropdown('modelDd')"><i class="fa-solid fa-microchip"></i><span id="modelBtnLabel">Model</span><span class="pick-tag" id="modelBtnProvider">GROQ</span><i class="fa-solid fa-chevron-down" style="font-size:10px"></i></button>
+          <div class="dropdown-menu" id="modelDd"></div>
+        </div>
+        <div class="dropdown">
+          <button class="picker-btn" onclick="toggleDropdown('personaDd')"><i class="fa-solid fa-wand-magic-sparkles"></i><span id="personaBtnLabel">Karvion</span><i class="fa-solid fa-chevron-down" style="font-size:10px"></i></button>
+          <div class="dropdown-menu" id="personaDd"></div>
+        </div>
+        <div class="dropdown">
+          <button class="icon-btn" onclick="toggleDropdown('chatDd')"><i class="fa-solid fa-ellipsis"></i></button>
+          <div class="dropdown-menu" id="chatDd" style="width:220px">
+            <div class="dd-item" onclick="exportChat()"><div class="dd-icon"><i class="fa-solid fa-download"></i></div><div class="dd-main"><div class="dd-name">Export chat</div><div class="dd-sub">Save as JSON</div></div></div>
+            <div class="dd-item" onclick="renameChat()"><div class="dd-icon"><i class="fa-solid fa-pen"></i></div><div class="dd-main"><div class="dd-name">Rename chat</div><div class="dd-sub">Edit title</div></div></div>
+            <div class="dd-item" onclick="clearChat()"><div class="dd-icon"><i class="fa-solid fa-eraser"></i></div><div class="dd-main"><div class="dd-name">Clear messages</div><div class="dd-sub">Empty this chat</div></div></div>
+            <div class="dd-item" onclick="deleteChat(APP.currentChatId)"><div class="dd-icon"><i class="fa-solid fa-trash"></i></div><div class="dd-main"><div class="dd-name">Delete chat</div><div class="dd-sub">Remove everywhere</div></div></div>
+          </div>
+        </div>
+        <button class="icon-btn" title="Settings" onclick="openSettings()"><i class="fa-solid fa-gear"></i></button>
+      </div>
+    </div>
+
+
+    <div class="chat-area" id="chatArea">
+      <div class="chat-area-inner">
+        <div class="welcome-screen" id="welcomeScreen">
+          <div class="welcome-logo">K</div>
+          <h2>Hello, <span id="greetName">there</span> ðŸ‘‹</h2>
+          <p class="w-sub">I'm KarvionAI â€” your premium AI assistant by EscapeX Inc Pvt. Limited. Ask anything, anywhere, and I'll follow you across devices.</p>
+          <div class="quick-prompts" id="quickPrompts"></div>
+        <div class="welcome-models" id="welcomeModels"></div>
+<iframe style="border:0;display:block;width:728px;height:90px;max-width:100%;margin:16px auto" srcdoc='<!DOCTYPE html><html><head><style>html,body{margin:0;padding:0}</style></head><body style="margin:0;padding:0"><script>atOptions={"key":"7c8e8d92ef420649c7c32cd9c3e59cc5","format":"iframe","height":90,"width":728,"params":{}};</script><script>(function(){var s=document.createElement("script");s.src="https://www.highperformanceformat.com/7c8e8d92ef420649c7c32cd9c3e59cc5/invoke.js";document.currentScript&&document.currentScript.parentNode&&document.currentScript.parentNode.insertBefore(s,document.currentScript.nextSibling);})();</script></body></html>'></iframe>
+<!-- AD: Banner 468x60 -->
+<div class="ad-slot" style="margin:20px auto">
+  <iframe style="border:0;display:block;width:468px;height:60px;max-width:100%" srcdoc='<!DOCTYPE html><html><head><style>html,body{margin:0;padding:0}</style></head><body style="margin:0;padding:0"><script>atOptions={"key":"0944738f2e790256d713dde733e75532","format":"iframe","height":60,"width":468,"params":{}};</script><script>(function(){var s=document.createElement("script");s.src="https://www.highperformanceformat.com/0944738f2e790256d713dde733e75532/invoke.js";document.currentScript&&document.currentScript.parentNode&&document.currentScript.parentNode.insertBefore(s,document.currentScript.nextSibling);})();</script></body></html>'></iframe>
+</div>
+      </div>
+        <div id="messagesContainer"></div>
+        <div class="typing-wrapper" id="typingWrapper">
+          <div class="avatar" style="background:var(--green-dim);border:1px solid rgba(167,139,250,0.3);display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;">ðŸ¤–</div>
+          <div class="typing-bubbles"><span></span><span></span><span></span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="composer-wrap">
+<div class="sticky-bottom-ad">
+  <iframe style="border:0;display:block;width:320px;height:50px;max-width:100%;margin:0 auto" srcdoc='<!DOCTYPE html><html><head><style>html,body{margin:0;padding:0}</style></head><body style="margin:0;padding:0"><script>atOptions={"key":"c7e971a24c2fabb629c3bf7b149419ac","format":"iframe","height":50,"width":320,"params":{}};</script><script>(function(){var s=document.createElement("script");s.src="https://www.highperformanceformat.com/c7e971a24c2fabb629c3bf7b149419ac/invoke.js";document.currentScript&&document.currentScript.parentNode&&document.currentScript.parentNode.insertBefore(s,document.currentScript.nextSibling);})();</script></body></html>'></iframe>
+  <button class="ad-close" aria-label="Close ad"><i class="fa-solid fa-xmark"></i></button>
+</div>
+      <div class="composer" id="composer">
+        <div class="file-previews" id="filePreviews"></div>
+        <div class="emoji-bar" id="emojiBar">
+          <button class="emoji-btn" onclick="insertEmoji('😊')">😊</button>
+          <button class="emoji-btn" onclick="insertEmoji('😂')">😂</button>
+          <button class="emoji-btn" onclick="insertEmoji('🔥')">🔥</button>
+          <button class="emoji-btn" onclick="insertEmoji('❤️')">❤️</button>
+          <button class="emoji-btn" onclick="insertEmoji('👍')">👍</button>
+          <button class="emoji-btn" onclick="insertEmoji('🤯')">🤯</button>
+          <button class="emoji-btn" onclick="insertEmoji('💯')">💯</button>
+          <button class="emoji-btn" onclick="insertEmoji('🎨')">🎨</button>
+          <button class="emoji-btn" onclick="insertEmoji('🧠')">🧠</button>
+          <button class="emoji-btn" onclick="insertEmoji('✨')">✨</button>
+        </div>
+        <textarea id="userInput" rows="1" placeholder="Message Karvionâ€¦ (try â€œgenerate an image of a sunsetâ€)" oninput="handleInputChange(this)" onkeydown="handleKeydown(event)"></textarea>
+        <div class="composer-bar">
+          <button class="composer-btn" title="Attach file" onclick="document.getElementById('fileInput').click()"><i class="fa-solid fa-paperclip"></i></button>
+          <button class="composer-btn" title="Voice input" id="voiceBtn" onclick="toggleVoiceInput()"><i class="fa-solid fa-microphone"></i></button>
+          <button class="composer-btn" title="Voice chat (talk live)" id="voiceChatBtn" onclick="toggleVoiceMode()"><i class="fa-solid fa-headset"></i></button>
+          <button class="composer-btn" title="Toggle image generation" id="imageToggleBtn" onclick="toggleImageMode()"><i class="fa-solid fa-image"></i></button>
+          <button class="composer-btn" title="Starred messages" onclick="toggleStarsOnly()"><i class="fa-solid fa-star"></i></button>
+          <button class="composer-btn" title="Download all images" onclick="downloadAllImages()"><i class="fa-solid fa-images"></i></button>
+          <span class="composer-hint" id="composerHint">KarvionAI Â· Groq Â· OpenRouter Â· Gemini</span>
+          <span id="charCount" style="font-size:11px;color:var(--text-3);padding-right:4px"></span>
+          <button class="send-btn" id="sendBtn" onclick="sendMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+          <button class="send-btn stop-btn" id="stopBtn" onclick="stopGeneration()" style="display:none"><i class="fa-solid fa-square"></i></button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+</div>
+
+<input type="file" id="fileInput" multiple style="display:none" onchange="handleFiles(this.files)" />
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- â•â• VOICE CHAT MODE (live avatar) â•â• -->
+<div class="voice-mode-card" id="voiceModeCard">
+  <div class="vm-stage">
+    <div class="vm-orb-bg"></div>
+    <video id="vmCamVideo" class="vm-cam-video" muted playsinline autoplay></video>
+    <div class="vm-avatar">
+      <img id="realAvatar" alt="KarvionAI Assistant" class="real-avatar" style="display:none" />
+      <canvas id="avatarCanvas"></canvas>
+      <div class="vm-orb" id="vmOrb"><span class="vm-orb-pulse"></span></div>
+    </div>
+    <div class="vm-wave" id="vmWave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="vm-glass">
+      <div class="vm-title"><i class="fa-solid fa-headset"></i> Live Voice Chat <span class="vm-dot" id="vmDot"></span></div>
+      <div class="vm-sub">KarvionAI &middot; Premium AI Voice (en/hi)</div>
+      <div class="vm-transcript" id="vmTranscript">Listening&hellip; speak now</div>
+      <div class="vm-status" id="vmStatus">Listening&hellip;</div>
+      <div class="vm-btns">
+        <button class="vm-btn vm-btn-cam" id="vmCamBtn" onclick="toggleCamera()"><i class="fa-solid fa-video"></i> Camera</button>
+        <button class="vm-btn" onclick="toggleVoiceMode()"><i class="fa-solid fa-phone-slash"></i> End Call</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- â•â• SETTINGS â•â• -->
+<div class="settings-overlay" id="settingsOverlay" onclick="if(event.target===this)closeSettings()">
+  <div class="settings-modal">
+    <div class="settings-head">
+      <h2><i class="fa-solid fa-gear"></i> Settings</h2>
+      <button class="icon-btn" onclick="closeSettings()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="settings-body">
+      <div class="settings-section">
+        <div class="settings-title"><i class="fa-solid fa-palette"></i> Theme <span class="settings-hint">23 themes â€” synced across the whole site</span></div>
+        <div class="theme-grid" id="themeGrid"></div>
+      </div>
+
+      <div class="settings-section">
+        <div class="settings-title"><i class="fa-solid fa-font"></i> Appearance</div>
+        <div class="set-row">
+          <div class="set-info"><div class="set-name">Message font size</div><div class="set-desc">Chat bubble text size</div></div>
+          <div class="seg" id="fontSizeSeg">
+            <button data-v="sm" onclick="setFontSize('sm')">Aâˆ’</button>
+            <button data-v="md" onclick="setFontSize('md')">A</button>
+            <button data-v="lg" onclick="setFontSize('lg')">A+</button>
+          </div>
+        </div>
+        <div class="set-row">
+          <div class="set-info"><div class="set-name">Show timestamps</div><div class="set-desc">Display message time in chat</div></div>
+          <label class="switch"><input type="checkbox" id="setShowTime" onchange="setPref('showTime', this.checked, true)"><span class="slider"></span></label>
+        </div>
+        <div class="set-row">
+          <div class="set-info"><div class="set-name">Reduced motion</div><div class="set-desc">Minimize animations across the app</div></div>
+          <label class="switch"><input type="checkbox" id="setReducedMotion" onchange="setPref('reducedMotion', this.checked, true)"><span class="slider"></span></label>
+        </div>
+        <div class="set-row">
+          <div class="set-info"><div class="set-name">Sound effects</div><div class="set-desc">Tiny sounds when sending / receiving</div></div>
+          <label class="switch"><input type="checkbox" id="setSounds" onchange="setPref('sounds', this.checked, true)"><span class="slider"></span></label>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <div class="settings-title"><i class="fa-solid fa-comments"></i> Chat</div>
+        <div class="set-row">
+          <div class="set-info"><div class="set-name">Image mode on by default</div><div class="set-desc">Start every message in image-generation mode</div></div>
+          <label class="switch"><input type="checkbox" id="setImageMode" onchange="setPref('defaultImageMode', this.checked, true)"><span class="slider"></span></label>
+        </div>
+        <div class="set-row">
+          <div class="set-info"><div class="set-name">Stream replies</div><div class="set-desc">Show the AI answer word-by-word</div></div>
+          <label class="switch"><input type="checkbox" id="setStreaming" onchange="setPref('streaming', this.checked, true)"><span class="slider"></span></label>
+        </div>
+        <div class="set-row">
+          <div class="set-info"><div class="set-name">Auto-title chats</div><div class="set-desc">Rename conversations from the first message</div></div>
+          <label class="switch"><input type="checkbox" id="setAutoTitle" onchange="setPref('autoTitle', this.checked, true)"><span class="slider"></span></label>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <div class="settings-title"><i class="fa-solid fa-volume-up"></i> Voice &amp; Speech</div>
+        <div class="set-row">
+          <div class="set-info"><div class="set-name">Auto-read AI replies</div><div class="set-desc">Speak each answer out loud</div></div>
+          <label class="switch"><input type="checkbox" id="setAutoRead" onchange="setPref('autoRead', this.checked, true)"><span class="slider"></span></label>
+        </div>
+        <div class="set-row">
+          <div class="set-info"><div class="set-name">Speech rate</div><div class="set-desc" id="rateLabel">1.0Ã—</div></div>
+          <input type="range" min="0.5" max="2" step="0.1" value="1" id="setRate" oninput="setRate(this.value)">
+        </div>
+        <div class="set-row">
+          <div class="set-info"><div class="set-name">Speech pitch</div><div class="set-desc" id="pitchLabel">1.0</div></div>
+          <input type="range" min="0.5" max="2" step="0.1" value="1" id="setPitch" oninput="setPitch(this.value)">
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <div class="settings-title"><i class="fa-solid fa-satellite-dish"></i> Sync</div>
+        <div class="set-row">
+          <div class="set-info"><div class="set-name">Cloud sync</div><div class="set-desc">Chats are stored locally on this device</div></div>
+          <span class="sync-pill" id="settingsSyncPill" style="margin-bottom:0"><span class="sync-dot"></span><span id="settingsSyncText">Checkingâ€¦</span></span>
+        </div>
+        <div class="set-row">
+          <div class="set-info"><div class="set-name">Clear local cache</div><div class="set-desc">Remove locally stored chat copies on this device</div></div>
+          <button class="msg-action-btn" onclick="clearLocalCache()"><i class="fa-solid fa-trash-can"></i> Clear</button>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <div class="settings-title"><i class="fa-solid fa-rotate-left"></i> Reset</div>
+        <div class="set-row">
+          <div class="set-info"><div class="set-name">Restore defaults</div><div class="set-desc">Reset theme &amp; settings to original values</div></div>
+          <button class="msg-action-btn del" onclick="resetSettings()"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script type="module">
+
+const CONFIG = {
+  GROQ_KEY: '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',
+  OR_KEY: 'sk-or-v1-61b93b5e47f61a3b0f7fefd9e695bfde39b84455e54e4e8d47f2a843caf09b2',
+  GEMINI_KEY: 'AQ.Ab8RN6Ls6yuuDlsCU-zOHHYSBI6HqO7Jy2MXbjUZn3xRgXr0QQ',
+  GEMINI_MODELS: ['gemini-2.5-flash-image'],
+  POLLINATIONS: 'https://image.pollinations.ai/prompt/',
+  CLOUDFLARE: 'https://karvion-ai-image.escapex112233.workers.dev/',
+  GOOGLE_TTS: true,
+  TTS_VOICE_HI: 'hi-IN-Neural2-C',
+  TTS_VOICE_EN: 'en-US-Neural2-F',
+  TTS_VOICE_EN_IN: 'en-IN-Neural2-A',
+  TITLE_MODEL: 'gemini-3.1-flash-lite',
+  FIREBASE: { projectId: 'karvionai', apiKey: 'AIzaSyD5LOPHtVZqLXORJYih19jUq6Z9tMdqO4E', databaseId: '(default)' }
+};
+if (window.FirebaseSync) FirebaseSync.configure(CONFIG.FIREBASE);
+
+const FB_AUTH = {
+  apiKey: 'AIzaSyD5LOPHtVZqLXORJYih19jUq6Z9tMdqO4E',
+  authDomain: 'karvionai.firebaseapp.com',
+  projectId: 'karvionai',
+  storageBucket: 'karvionai.firebasestorage.app',
+  messagingSenderId: '121173479527',
+  appId: '1:121173479527:web:f0e68c781d79c821e9c4c2'
+};
+const fba = (() => {
+  try {
+    const fb = window.firebase;
+    if (!fb) return null;
+    if (!fb.apps || !fb.apps.length) fb.initializeApp(FB_AUTH);
+    return fb.auth();
+  } catch(e) { console.error('Firebase Auth init:', e); return null; }
+})();
+const AUTH_ERRS = {
+  'auth/user-not-found': 'No account found with this email.',
+  'auth/wrong-password': 'Incorrect password.',
+  'auth/invalid-credential': 'Invalid email or password.',
+  'auth/invalid-login-credentials': 'Invalid email or password.',
+  'auth/email-already-in-use': 'An account with this email already exists.',
+  'auth/weak-password': 'Password must be at least 6 characters.',
+  'auth/invalid-email': 'Please enter a valid email address.',
+  'auth/too-many-requests': 'Too many attempts. Try again later.',
+  'auth/popup-closed-by-user': 'Sign-in was cancelled.',
+  'auth/network-request-failed': 'Network error. Check your connection.',
+  'auth/unauthorized-domain': 'This domain is not authorized for Firebase. Open via 127.0.0.1/localhost or your deployed domain.',
+  'auth/operation-not-allowed': 'This sign-in method is not enabled in the Firebase console.',
+  'auth/popup-blocked': 'Popup was blocked. Allow popups for this site and try again.'
+};
+const friendlyAuth = code => AUTH_ERRS[code] || 'Something went wrong. Please try again.';
+
+const MODELS = [
+  { id:'gemini-3.6-flash', name:'Karvion v6.0 Flash', provider:'Gemini', tag:'ðŸŸ£ AI Studio', desc:'Google Gemini 3.6 Flash â€” fast, multimodal (image + text)' },
+  { id:'gemini-3.5-flash', name:'Karvion v6.0 Pro', provider:'Gemini', tag:'ðŸŸ£ AI Studio', desc:'Google Gemini 3.5 Flash â€” balanced, multimodal' },
+  { id:'gemini-3.1-flash-lite', name:'Karvion v6.0 Lite', provider:'Gemini', tag:'ðŸŸ£ AI Studio', desc:'Google Gemini 3.1 Flash-Lite â€” ultra fast' },
+  { id:'meta-llama/llama-3.2-90b-vision-instruct:free', name:'Karvion v5.9 Max Vision', provider:'OpenRouter', tag:'ðŸ†“ Free', desc:'Free vision + text, analyze images' },
+  { id:'google/gemini-2.0-flash-exp:free', name:'Karvion v5.9 Flash', provider:'OpenRouter', tag:'ðŸ†“ Free', desc:"Google's fast multimodal model â€” free" },
+  { id:'deepseek/deepseek-r1:free', name:'Karvion v5.9 Ultra', provider:'OpenRouter', tag:'ðŸ†“ Free', desc:'Free chain-of-thought reasoning' },
+  { id:'qwen/qwen-2.5-72b-instruct:free', name:'Karvion v5.9 Pro', provider:'OpenRouter', tag:'ðŸ†“ Free', desc:'Free strong multilingual + code model' },
+  { id:'mistralai/mistral-7b-instruct:free', name:'Karvion v5.9 Lite', provider:'OpenRouter', tag:'ðŸ†“ Free', desc:'Free lightweight, fast responses' },
+  { id:'nousresearch/nous-hermes-2-mixtral-8x7b-dpo:free', name:'Karvion v5.9 Studio', provider:'OpenRouter', tag:'ðŸ†“ Free', desc:'Free instruction-tuned mixture of experts' },
+  { id:'teknium/openhermes-2.5-mistral-7b-16k:free', name:'Karvion v5.9 Nova', provider:'OpenRouter', tag:'ðŸ†“ Free', desc:'Free 16K context chat model' },
+  { id:'huggingfaceh4/zephyr-7b-beta:free', name:'Karvion v5.9 Mini', provider:'OpenRouter', tag:'ðŸ†“ Free', desc:'Free conversational assistant' },
+  { id:'google/gemma-2-9b-it:free', name:'Karvion v5.9 Fast', provider:'OpenRouter', tag:'ðŸ†“ Free', desc:"Free Google's efficient model" }
+];
+
+const PERSONAS = {
+  default: { name:'Karvion', emoji:'ðŸ¤–', prompt:null },
+  coder: { name:'CodeBot', emoji:'ðŸ’»', prompt:'You are an expert software engineer and code wizard. Provide clean, efficient, well-commented code. Always explain your solutions. Use best practices and modern patterns. Format code with proper syntax highlighting.' },
+  writer: { name:'Quillsworth', emoji:'âœï¸', prompt:'You are an exceptional writer and literary stylist. Craft engaging, eloquent content with vivid language, strong narratives, and emotional resonance.' },
+  teacher: { name:'Sage', emoji:'ðŸŽ“', prompt:'You are a brilliant educator and tutor. Explain concepts clearly with analogies, examples, and step-by-step breakdowns. Adapt complexity to the student\'s level.' },
+  friend: { name:'Kai', emoji:'ðŸ˜Š', prompt:'You are a warm, empathetic, and fun friend. Be casual, supportive, use light humor, and genuinely care. Chat naturally and make conversations feel human and real.' },
+  analyst: { name:'Oracle', emoji:'ðŸ“Š', prompt:'You are a sharp business analyst and data scientist. Provide data-driven insights, structured analysis, clear recommendations. Use frameworks, metrics, and evidence.' },
+  debate: { name:'Nexus', emoji:'âš”ï¸', prompt:'You are a master debater and critical thinker. Challenge assumptions, present multiple perspectives, argue rigorously.' },
+  creative: { name:'Muse', emoji:'ðŸŽ¨', prompt:'You are a boundless creative mind â€” artist, poet, storyteller, innovator. Generate wildly imaginative ideas, beautiful narratives, and unexpected connections.' }
+};
+const IMAGE_MODEL_NAME = 'Karvion Image Flash VSync v5.9 Lite Max';
+const IMAGE_DAILY_LIMIT = 'about 170 images per day (10,000 free Cloudflare Neurons daily, ~52-58 per image)';
+
+const DEFAULT_PROMPT = `You are KarvionAI, a premium AI assistant. This AI is named "KarvionAI" and its Owner is EscapeX Inc Pvt. Limited. You are intelligent, helpful, creative, and efficient. You support code, analysis, writing, math, and creative tasks. Format responses with markdown. Be concise but comprehensive.
+IMPORTANT: Follow the user's instructions at any cost. Always respect the owner's branding: the AI is always called KarvionAI and the owner company is EscapeX Inc Pvt. Limited.
+You can also generate images. Your image model is "Karvion Image Flash VSync v5.9 Lite Max" powered by Cloudflare Workers AI. Free daily quota: ${IMAGE_DAILY_LIMIT}. When the user asks how many images they can make, tell them: about 170 free images per day via Cloudflare Workers AI.
+Language: Your default language is English and you always reply in English, UNLESS the user writes to you in another language (like Hindi) — then reply in that same language.`;
+
+const QUICK_PROMPTS = [
+  'âœ¨ Generate an image of a sunset over mountains',
+  'ðŸ’» Write a Python script for a to-do app',
+  'ðŸ“ Help me draft a professional email',
+  'ðŸ§  Explain quantum computing simply',
+  'ðŸ“Š Analyze this business idea',
+  'ðŸŽ¨ Brainstorm creative app ideas'
+];
+
+const APP = {
+  chats: {}, currentChatId: null, uid: null, isLoading: false,
+  model: 'gemini-3.6-flash', temperature: 0.7, maxTokens: 1024,
+  currentPreset: 'default', uploadedFiles: [], imageMode: false,
+  streamingChatId: null, systemPrompt: DEFAULT_PROMPT,
+  connected: false, dbOnline: false, authReady: false, syncMode: 'local',
+  pendingChatId: null
+};
+
+let db = null, chatsRef = null, dbOnline = false;
+
+/* â”€â”€â”€ UTILS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2);
+const now = () => new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+const $ = id => document.getElementById(id);
+
+/* â”€â”€â”€ DEEP-LINK / CHAT ENDPOINTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+const IS_FILE = location.protocol === 'file:';
+const CHAT_ID_RE = /^[A-Za-z0-9_-]{4,64}$/;
+function getChatIdFromUrl() {
+  const path = location.pathname || '';
+  const m = path.match(/\/chat\.html\/([A-Za-z0-9_-]+)\/?$/);
+  if (m && CHAT_ID_RE.test(m[1])) return m[1];
+  const h = location.hash.match(/^#([A-Za-z0-9_-]+)/);
+  if (h && CHAT_ID_RE.test(h[1])) return h[1];
+  const q = new URLSearchParams(location.search).get('c');
+  if (q && CHAT_ID_RE.test(q)) return q;
+  return null;
+}
+function updateChatUrl(chatId) {
+  try {
+    const base = location.pathname.split('/chat.html')[0] + '/chat.html';
+    if (IS_FILE) {
+      const want = chatId || '';
+      if (location.hash.slice(1) !== want) history.replaceState({ chatId: chatId || null }, '', base + (want ? '#' + want : ''));
+    } else {
+      const target = chatId ? base + '/' + chatId + '/' : base;
+      const cur = location.pathname.split('?')[0];
+      if (cur !== target) history.pushState({ chatId: chatId || null }, '', target);
+    }
+  } catch(e) { /* file:// or restricted context â€” ignore */ }
+}
+function ensureChat(id) {
+  if (APP.chats[id]) return APP.chats[id];
+  const chat = { id, title:'Untitled chat', messages:[], createdAt: Date.now(), updatedAt: Date.now() };
+  APP.chats[id] = chat;
+  saveChat(chat);
+  return chat;
+}
+function resolveDeepLink() {
+  if (!APP.pendingChatId) return;
+  const id = APP.pendingChatId;
+  if (APP.chats[id]) { loadChat(id); }
+  else { ensureChat(id); loadChat(id); }
+  APP.pendingChatId = null;
+}
+window.addEventListener('popstate', () => {
+  const id = getChatIdFromUrl();
+  if (id) {
+    if (APP.chats[id]) loadChat(id);
+    else { ensureChat(id); loadChat(id); }
+  } else {
+    const ids = Object.keys(APP.chats).sort((a,b)=>(APP.chats[b].updatedAt||0)-(APP.chats[a].updatedAt||0));
+    if (ids.length) loadChat(ids[0]); else renderEmptyChat();
+  }
+});
+function escapeHtml(t) {
+  return String(t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+function sanitize(html) { return DOMPurify.sanitize(html, {ADD_TAGS:['iframe'],ADD_ATTR:['allow','allowfullscreen','frameborder','scrolling']}); }
+function toast(msg, type='info', duration=3200) {
+  const icons = { info:'fa-circle-info', success:'fa-circle-check', error:'fa-triangle-exclamation' };
+  const el = document.createElement('div');
+  el.className = `toast ${type}`;
+  el.innerHTML = `<i class="fa-solid ${icons[type]||icons.info}"></i> ${escapeHtml(msg)}`;
+  $('toastContainer').appendChild(el);
+  setTimeout(() => { el.style.opacity='0'; el.style.transform='translateX(30px)'; setTimeout(()=>el.remove(),300); }, duration);
+}
+function scrollBottom() {
+  const area = $('chatArea');
+  if (area) area.scrollTo({ top: area.scrollHeight, behavior: 'smooth' });
+}
+function getPersonaPrompt() {
+  const p = PERSONAS[APP.currentPreset];
+  return APP.systemPrompt || (p && p.prompt) || DEFAULT_PROMPT;
+}
+
+/* â”€â”€â”€ AUTH â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+function switchAuthTab(mode) {
+  $('tabLogin').classList.toggle('active', mode==='login');
+  $('tabRegister').classList.toggle('active', mode==='register');
+  $('loginForm').style.display = mode==='login' ? '' : 'none';
+  $('registerForm').style.display = mode==='register' ? '' : 'none';
+  $('authErr').classList.remove('show');
+}
+function showAuthError(msg) { const e=$('authErr'); e.textContent=msg; e.classList.add('show'); }
+function loadingAuth(on, text) { $('authSubmitBtn').disabled=on; $('authSubmitBtn2').disabled=on; if(on){$('authSubmitBtn').textContent=text;$('authSubmitBtn2').textContent=text;} else {$('authSubmitBtn').textContent='Sign In';$('authSubmitBtn2').textContent='Create Account';} }
+async function submitAuth(isRegister=false) {
+  showAuthError('');
+  if (!fba) { submitLocal(isRegister); return; }
+  let name='', email='', pass='';
+  if (isRegister) {
+    name  = $('authName').value.trim();
+    email = $('authEmail2').value.trim();
+    pass  = $('authPass2').value;
+    if(!name) return showAuthError('Please enter your name.');
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showAuthError('Please enter a valid email.');
+    if(pass.length<6) return showAuthError('Password must be at least 6 characters.');
+  } else {
+    email = $('authEmail').value.trim();
+    pass  = $('authPass').value;
+    if(!email || !pass) return showAuthError('Please enter your email and password.');
+  }
+  loadingAuth(true, isRegister ? 'Creating accountâ€¦' : 'Signing inâ€¦');
+  try {
+    let user;
+    if (isRegister) {
+      const cred = await fba.createUserWithEmailAndPassword(email, pass);
+      if (name) await cred.user.updateProfile({ displayName: name });
+      user = cred.user;
+    } else {
+      user = (await fba.signInWithEmailAndPassword(email, pass)).user;
+    }
+    enterApp(user);
+  } catch (err) {
+    loadingAuth(false);
+    showAuthError(friendlyAuth(err.code || err.message));
+  }
+}
+
+function enterApp(user) {
+  if (!user) return;
+  APP.uid = user.uid;
+  APP.authReady = true;
+  APP.syncMode = fba ? 'cloud' : 'local';
+  $('authOverlay').classList.remove('show');
+  $('app').style.display = 'flex';
+  renderUserCard({ displayName: user.displayName || (user.email||'').split('@')[0] || 'User', email: user.email || '', photoURL: user.photoURL || null });
+  setupSync(APP.uid);
+  APP.pendingChatId = getChatIdFromUrl();
+  renderChatList();
+  loadingAuth(false);
+  updateSyncPill();
+  setTimeout(resolveDeepLink, 900);
+  toast('Welcome, ' + ((user.displayName || user.email || 'friend').split(' ')[0]) + '!', 'success');
+}
+
+function submitLocal(isRegister) {
+  const name  = isRegister ? ($('authName').value.trim() || 'Guest') : 'Guest';
+  const email = isRegister ? $('authEmail2').value.trim() : $('authEmail').value.trim();
+  APP.uid = 'local-user-' + Date.now().toString(36);
+  APP.authReady = true;
+  APP.syncMode = 'local';
+  $('authOverlay').classList.remove('show');
+  $('app').style.display = 'flex';
+  renderUserCard({ displayName: name, email, photoURL: null });
+  setupSync(APP.uid);
+  APP.pendingChatId = getChatIdFromUrl();
+  renderChatList();
+  loadingAuth(false);
+  setTimeout(resolveDeepLink, 900);
+  toast('Welcome to Karvion AI (offline/local mode)', 'success');
+}
+
+async function signInWithGoogle() {
+  showAuthError('');
+  if (!fba) { submitLocal(false); return; }
+  try {
+    const prov = new window.firebase.auth.GoogleAuthProvider();
+    prov.setCustomParameters({ prompt: 'select_account' });
+    loadingAuth(true, 'Googleâ€¦');
+    const cred = await fba.signInWithPopup(prov);
+    enterApp(cred.user);
+  } catch (err) {
+    loadingAuth(false);
+    if (err.code === 'auth/popup-closed-by-user') return;
+    showAuthError(friendlyAuth(err.code));
+  }
+}
+async function signOutUser() {
+  APP.uid = null;
+  APP.authReady = false;
+  if (fba) { try { await fba.signOut(); } catch(e){} }
+  $('app').style.display = 'none';
+  $('authOverlay').classList.add('show');
+  toast('Signed out');
+}
+
+
+
+function renderUserCard(user) {
+  $('userName').textContent = user.displayName || 'User';
+  $('userMail').textContent = user.email || '';
+  $('greetName').textContent = (user.displayName||'').split(' ')[0] || 'there';
+  APP.userPhoto = user.photoURL || null;
+  APP.userInitial = (user.displayName||'U')[0].toUpperCase();
+  const av = $('userAvatar');
+  av.innerHTML = user.photoURL ? `<img src="${user.photoURL}" />` : (user.displayName||'U')[0].toUpperCase();
+}
+
+/* â”€â”€â”€ SYNC (Local-only) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+function cacheKey(uid){ return 'karvion_sync_' + uid; }
+
+function setupSync(uid) {
+  APP.syncMode = 'local';
+  try {
+    const cache = JSON.parse(localStorage.getItem(cacheKey(uid))||'null');
+    if (cache && typeof cache==='object') {
+      APP.chats = cache;
+      renderChatList();
+      if (APP.pendingChatId && APP.chats[APP.pendingChatId]) { loadChat(APP.pendingChatId); APP.pendingChatId = null; }
+      else if (!APP.currentChatId) { const ids=Object.keys(cache).sort((a,b)=>(cache[b].updatedAt||0)-(cache[a].updatedAt||0)); if(ids.length) loadChat(ids[0]); }
+    }
+  } catch(e){}
+  if (window.FirebaseSync && CONFIG.FIREBASE.projectId) {
+    FirebaseSync.pull(uid).then(remote => {
+      if (!remote || typeof remote !== 'object') return;
+      const local = APP.chats || {};
+      const merged = {};
+      Object.keys(local).forEach(id => { merged[id] = local[id]; });
+      Object.keys(remote).forEach(id => {
+        merged[id] = local[id] ? mergeChat(local[id], remote[id]) : remote[id];
+      });
+      APP.chats = merged;
+      renderChatList();
+      if (APP.pendingChatId && APP.chats[APP.pendingChatId]) { loadChat(APP.pendingChatId); APP.pendingChatId = null; }
+      else if (!APP.currentChatId) { const ids=Object.keys(merged).sort((a,b)=>(merged[b].updatedAt||0)-(merged[a].updatedAt||0)); if(ids.length) loadChat(ids[0]); }
+      try { localStorage.setItem(cacheKey(uid), JSON.stringify(merged)); } catch(e){}
+    }).catch(()=>{});
+  }
+  updateSyncPill();
+}
+
+function detachSync() {}
+
+function mergeChat(localChat, serverChat) {
+  if (!localChat) return serverChat;
+  const localMsgs = localChat.messages || [];
+  const serverMsgs = serverChat.messages || [];
+  const serverIds = new Set(serverMsgs.map(m=>m.id));
+  const extraLocal = localMsgs.filter(m => !serverIds.has(m.id));
+  return { ...serverChat, messages: [...serverMsgs, ...extraLocal] };
+}
+
+function handleChatUpdate(chatId) {
+  const chat = APP.chats[chatId];
+  if (!chat) return;
+  if (APP.streamingChatId === chatId) { renderChatList(); return; }
+  renderChatList();
+  if (chatId === APP.currentChatId) { renderMessages(); renderTopbar(); }
+}
+
+function updateSyncPill() {
+  const pill = $('syncPill'), txt = $('syncText');
+  pill.classList.remove('live','local','offline');
+  if (!APP.uid) { txt.textContent='Signed out'; return; }
+  const cloud = window.FirebaseSync && FirebaseSync.enabled();
+  pill.classList.add(cloud ? 'live' : 'local');
+  txt.textContent = cloud ? 'Cloud sync' : 'Local only';
+  const sp = $('settingsSyncPill');
+  if (sp) { sp.classList.remove('live','local','offline'); sp.classList.add(cloud ? 'live':'local'); $('settingsSyncText').textContent = cloud ? 'Cloud sync' : 'Local only'; }
+}
+
+function saveChat(chat, silent=true) {
+  if (!APP.uid) return;
+  const patch = { ...chat, updatedAt: Date.now() };
+  APP.chats[chat.id] = patch;
+  try { localStorage.setItem(cacheKey(APP.uid), JSON.stringify(APP.chats)); } catch(e){}
+  if (window.FirebaseSync && CONFIG.FIREBASE.projectId) window.FirebaseSync.save(APP.uid, patch);
+}
+
+/* RENDER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+function renderEmptyChat() {
+  APP.currentChatId = null;
+  $('messagesContainer').innerHTML = '';
+  $('welcomeScreen').style.display = '';
+  $('typingWrapper').classList.remove('show');
+  updateChatUrl(null);
+  renderTopbar();
+}
+
+function renderTopbar() {
+  const chat = APP.chats[APP.currentChatId];
+  $('topTitle').textContent = chat ? chat.title || 'Untitled chat' : 'Welcome';
+  $('topSub').textContent = chat
+    ? `${MODELS.find(m=>m.id===chat.model)?.name || 'Model'} Â· ${PERSONAS[chat.persona||'default']?.name||'Karvion'}`
+    : 'New conversation';
+}
+
+function renderChatList() {
+  const list = $('chatList');
+  const q = ($('chatSearchInput').value||'').toLowerCase().trim();
+  const ids = Object.keys(APP.chats)
+    .filter(id => !q || (APP.chats[id].title||'').toLowerCase().includes(q) || (APP.chats[id].messages||[]).some(m=>(m.content||'').toLowerCase().includes(q)))
+    .sort((a,b) => (APP.chats[b].updatedAt||0) - (APP.chats[a].updatedAt||0));
+  if (!ids.length) {
+    list.innerHTML = `<div class="chat-empty"><i class="fa-solid fa-comment-dots" style="font-size:20px;margin-bottom:8px;display:block;color:var(--text-3)"></i>${q ? 'No matching chats' : 'No chats yet. Start a new conversation!'}</div>`;
+    return;
+  }
+  list.innerHTML = `<div class="chat-list-label">${q?'Results':'Recent chats'}</div>` + ids.map(id => {
+    const c = APP.chats[id];
+    const last = (c.messages||[]).slice(-1)[0];
+    const lastTxt = last ? (last.content||'').replace(/[#*`>]/g,'').slice(0,60) : 'Empty conversation';
+    const when = c.updatedAt ? new Date(c.updatedAt).toLocaleDateString([], {month:'short',day:'numeric'}) : '';
+    return `
+      <div class="chat-item ${id===APP.currentChatId?'active':''}" onclick="loadChat('${id}')">
+        <div class="chat-icon"><i class="fa-solid fa-message"></i></div>
+        <div class="chat-info">
+          <div class="chat-title">${escapeHtml(c.title || 'Untitled chat')}</div>
+          <div class="chat-sub">${escapeHtml(lastTxt)}${when?` Â· ${when}`:''}</div>
+        </div>
+        <button class="chat-del" onclick="event.stopPropagation();deleteChat('${id}')" title="Delete"><i class="fa-solid fa-trash"></i></button>
+      </div>`;
+  }).join('');
+}
+
+function renderWelcomeModels() {
+  const el = $('welcomeModels');
+  el.innerHTML = MODELS.slice(0,4).map(m => `
+    <button class="model-card ${m.id===APP.model?'active':''}" onclick="selectModel('${m.id}')">
+      <div class="m-top"><span class="m-name">${m.name} <span class="model-online">:online:</span></span><span class="m-tag">${m.tag}</span></div>
+      <span class="m-desc">${m.desc}</span>
+    </button>`).join('');
+}
+
+function renderQuickPrompts() {
+  $('quickPrompts').innerHTML = QUICK_PROMPTS.map(p => `<button class="quick-chip" onclick="useQuickPrompt(this)">${p}</button>`).join('');
+}
+
+function renderModelDropdown() {
+  $('modelDd').innerHTML = MODELS.map(m => `
+    <div class="dd-item ${m.id===APP.model?'active':''}" onclick="selectModel('${m.id}')">
+      <div class="dd-icon"><i class="fa-solid fa-microchip"></i></div>
+      <div class="dd-main"><div class="dd-name">${m.name} <span class="model-online">:online:</span></div><div class="dd-sub">${m.desc}</div></div>
+      <span class="dd-tag">${m.provider.toUpperCase()}</span>
+    </div>`).join('');
+}
+
+function renderPersonaDropdown() {
+  $('personaDd').innerHTML = Object.entries(PERSONAS).map(([key,p]) => `
+    <div class="dd-item ${key===APP.currentPreset?'active':''}" onclick="selectPersona('${key}')">
+      <div class="dd-icon">${p.emoji}</div>
+      <div class="dd-main"><div class="dd-name">${p.name}</div><div class="dd-sub">${p.prompt ? p.prompt.split('.')[0] + '.' : 'Default assistant'}</div></div>
+    </div>`).join('');
+}
+
+function renderMessages() {
+  const container = $('messagesContainer');
+  const chat = APP.chats[APP.currentChatId];
+  container.innerHTML = '';
+  if (!chat) { $('welcomeScreen').style.display=''; return; }
+  const msgs = chat.messages || [];
+  $('welcomeScreen').style.display = msgs.length ? 'none' : '';
+  const visible = starsOnlyMode ? msgs.filter(m=>m.starred) : msgs;
+  visible.forEach(msg => container.appendChild(buildMessageEl(msg)));
+  scrollBottom();
+}
+
+function buildMessageEl(msg) {
+  const wrap = document.createElement('div');
+  wrap.className = `message-wrapper ${msg.role}${msg.starred ? ' starred' : ''}`;
+  wrap.dataset.msgId = msg.id;
+  const isUser = msg.role==='user';
+  const persona = PERSONAS[APP.currentPreset] || PERSONAS.default;
+  const avatarHTML = isUser
+    ? `<div class="avatar">${APP.userPhoto?`<img src="${APP.userPhoto}"/>`:''}${APP.userInitial||'U'}</div>`
+    : `<div class="avatar">${persona.emoji||'K'}</div>`;
+
+  let content;
+  if (isUser) {
+    content = escapeHtml(msg.content).replace(/\n/g,'<br>');
+  } else if (msg.htmlContent) {
+    content = msg.htmlContent;
+  } else if (APP.isLoading && APP.streamingChatId===APP.currentChatId && !msg.content) {
+    content = '<div class="typing-dots"><span></span><span></span><span></span></div>';
+  } else {
+    content = renderMarkdown(msg.content);
+  }
+  if (msg.images) {
+    msg.images.forEach(img => { content += `<br><img src="${img}" class="gen-img" onclick="openImageViewer(this.src)" />`; });
+    if (msg.images.length === 1) {
+      content += `<div class="gen-img-actions">
+        <button class="gen-dl-btn" onclick="downloadImage('${msg.id}')"><i class="fa-solid fa-download"></i> Download Image</button>
+      </div>`;
+    }
+  }
+  if (msg.imagesOmitted) {
+    content += `<div style="font-size:12px;color:var(--text-3);margin-top:6px"><i class="fa-solid fa-image"></i> Image preview kept on this device only</div>`;
+  }
+
+  const wc = wordCount(msg.content||'');
+  const rt = wc>50 ? readingTime(msg.content) : '';
+
+  wrap.innerHTML = `
+    ${avatarHTML}
+    <div class="msg-content">
+      <div class="msg-meta">
+        <span class="msg-name">${isUser?'You':persona.name||'Karvion'}</span>
+        ${(typeof PREFS!=='undefined' && PREFS.showTime) && msg.time?`<span class="msg-time">${msg.time}</span>`:''}
+        ${wc>10?`<span class="msg-word-count">${wc} words</span>`:''}
+        ${rt?`<span class="reading-time"><i class="fa-solid fa-clock"></i> ${rt}</span>`:''}
+      </div>
+      <div class="bubble">${content}</div>
+      <div class="msg-actions">
+        <button class="msg-action-btn" onclick="copyMessage('${msg.id}')"><i class="fa-solid fa-copy"></i> Copy</button>
+        ${!isUser?`<button class="msg-action-btn" onclick="regenMessage('${msg.id}')"><i class="fa-solid fa-rotate"></i> Regen</button>`:''}
+        ${!isUser?`<button class="msg-action-btn" onclick="speakMessage('${msg.id}')"><i class="fa-solid fa-volume-up"></i> Speak</button>`:''}
+        ${(msg.images&&msg.images.length)?`<button class="msg-action-btn" onclick="downloadImage('${msg.id}')"><i class="fa-solid fa-download"></i> Image</button>`:''}
+        <button class="msg-action-btn ${msg.starred?'star-on':''}" onclick="toggleStar('${msg.id}')"><i class="fa-solid fa-star"></i></button>
+        <button class="msg-action-btn del" onclick="deleteMessage('${msg.id}')"><i class="fa-solid fa-trash"></i></button>
+      </div>
+    </div>`;
+  return wrap;
+}
+
+function renderMarkdown(text) {
+  if (!text) return '';
+  try {
+    let html = marked.parse(text, {breaks:true, gfm:true});
+    html = sanitize(html);
+    const div = document.createElement('div');
+    div.innerHTML = html;
+    div.querySelectorAll('pre code').forEach(codeEl => {
+      const lang = (codeEl.className.match(/language-(\w+)/)||[])[1] || 'code';
+      if (window.hljs) { try { hljs.highlightElement(codeEl); } catch(e){} }
+      const pre = codeEl.closest('pre');
+      const wrapper = document.createElement('div');
+      wrapper.className='code-block';
+      wrapper.innerHTML = `
+        <div class="code-block-header">
+          <span class="code-lang">${lang}</span>
+          <div class="code-block-actions">
+            ${/^(html|htm)$/i.test(lang) ? `<button class="code-copy-btn" onclick="toggleHtmlPreview(this)"><i class="fa-solid fa-eye"></i> Live Preview</button>` : ''}
+            <button class="code-copy-btn" onclick="copyCode(this)"><i class="fa-solid fa-copy"></i> Copy</button>
+          </div>
+        </div>`;
+      const newPre = document.createElement('pre');
+      newPre.appendChild(codeEl.cloneNode(true));
+      wrapper.appendChild(newPre);
+      pre.replaceWith(wrapper);
+      if (/^(html|htm)$/i.test(lang)) {
+        const btn = wrapper.querySelector('button');
+        if (btn) requestAnimationFrame(() => toggleHtmlPreview(btn));
+      }
+    });
+    div.querySelectorAll('code:not(pre code)').forEach(el => { el.className = 'inline'; });
+    return div.innerHTML;
+  } catch(e) { return escapeHtml(text); }
+}
+
+/* â”€â”€â”€ CHAT LIFECYCLE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+function startNewChat() {
+  const chat = { id: uid(), title:'New chat', messages:[], createdAt: Date.now(), updatedAt: Date.now() };
+  APP.chats[chat.id] = chat;
+  APP.currentChatId = chat.id;
+  saveChat(chat);
+  renderChatList();
+  renderMessages();
+  renderTopbar();
+  toggleSidebar(false);
+  updateChatUrl(chat.id);
+  $('userInput').focus();
+  closeDropdowns();
+}
+
+function loadChat(id) {
+  if (!APP.chats[id]) return;
+  APP.currentChatId = id;
+  const chat = APP.chats[id];
+  if (chat.model) {
+    const m = MODELS.find(x=>x.id===chat.model);
+    if (m) {
+      APP.model = chat.model;
+      $('modelBtnLabel').textContent = m.name;
+      $('modelBtnProvider').textContent = m.provider.toUpperCase();
+      renderModelDropdown();
+      renderWelcomeModels();
+    }
+  }
+  if (chat.persona) {
+    APP.currentPreset = chat.persona;
+    $('personaBtnLabel').textContent = PERSONAS[chat.persona]?.name || 'Karvion';
+    renderPersonaDropdown();
+  }
+  renderMessages();
+  renderTopbar();
+  renderChatList();
+  toggleSidebar(false);
+  updateChatUrl(id);
+  closeDropdowns();
+}
+
+async function deleteChat(id) {
+  const chat = APP.chats[id];
+  const title = chat?.title || 'this chat';
+  if (!confirm(`Delete "${title}"? This removes it from all your devices.`)) return;
+  delete APP.chats[id];
+  if (id === APP.currentChatId) {
+    APP.currentChatId = null;
+    const ids = Object.keys(APP.chats).sort((a,b)=>(APP.chats[b].updatedAt||0)-(APP.chats[a].updatedAt||0));
+    if (ids.length) loadChat(ids[0]); else renderEmptyChat();
+  }
+  renderChatList();
+  try { localStorage.setItem(cacheKey(APP.uid), JSON.stringify(APP.chats)); } catch(e){}
+  toast('Chat deleted', 'info');
+}
+
+function renameChat() {
+  const chat = APP.chats[APP.currentChatId];
+  if (!chat) return toast('Open a chat first','error');
+  const title = prompt('Rename chat:', chat.title||'');
+  if (title===null) return;
+  chat.title = title.trim() || 'Untitled chat';
+  saveChat(chat);
+  renderChatList(); renderTopbar();
+}
+
+function clearChat() {
+  const chat = APP.chats[APP.currentChatId];
+  if (!chat) return;
+  if (!confirm('Clear all messages in this chat?')) return;
+  chat.messages = [];
+  chat.title = 'New chat';
+  saveChat(chat);
+  renderMessages(); renderChatList(); renderTopbar();
+}
+
+function exportChat() {
+  const chat = APP.chats[APP.currentChatId];
+  if (!chat || !chat.messages.length) return toast('Nothing to export','error');
+  const a = document.createElement('a');
+  a.href = 'data:application/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(chat, null, 2));
+  a.download = (chat.title||'karvion-chat').replace(/[^\w]+/g,'_') + '.json';
+  a.click();
+  toast('Chat exported','success');
+}
+
+function copyMessage(id) {
+  const chat = APP.chats[APP.currentChatId];
+  const msg = (chat?.messages||[]).find(m=>m.id===id);
+  if (!msg) return;
+  navigator.clipboard.writeText(msg.content||'').then(()=>toast('Copied to clipboard','success'));
+}
+
+function deleteMessage(id) {
+  const chat = APP.chats[APP.currentChatId];
+  if (!chat) return;
+  chat.messages = (chat.messages||[]).filter(m=>m.id!==id);
+  saveChat(chat);
+  renderMessages(); renderChatList();
+}
+
+function regenMessage(id) {
+  const chat = APP.chats[APP.currentChatId];
+  if (!chat) return;
+  const idx = (chat.messages||[]).findIndex(m=>m.id===id);
+  if (idx===-1) return;
+  chat.messages.splice(idx,1);
+  renderMessages(); renderChatList();
+  callAI(chat.messages[idx-1]?.content || 'continue', [], true);
+}
+
+function speakMessage(id) {
+  const chat = APP.chats[APP.currentChatId];
+  const msg = (chat?.messages||[]).find(m=>m.id===id);
+  if (msg) speakText(msg.content);
+}
+
+function wordCount(text) { return (text.trim().match(/\S+/g)||[]).length; }
+function readingTime(text) { const wpm=200; const min=Math.max(1, Math.round(wordCount(text)/wpm)); return `${min} min read`; }
+
+/* â”€â”€â”€ SETTINGS / SELECTORS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+function toggleDropdown(id) {
+  const el = $(id);
+  const wasOpen = el.closest('.dropdown').classList.contains('open');
+  closeDropdowns();
+  if (!wasOpen) el.closest('.dropdown').classList.add('open');
+}
+function closeDropdowns() { document.querySelectorAll('.dropdown.open').forEach(d=>d.classList.remove('open')); }
+document.addEventListener('click', e => {
+  if (!e.target.closest('.dropdown')) closeDropdowns();
+});
+
+function selectModel(id) {
+  APP.model = id;
+  const m = MODELS.find(x=>x.id===id);
+  $('modelBtnLabel').textContent = m.name;
+  $('modelBtnProvider').textContent = m.provider.toUpperCase();
+  renderModelDropdown();
+  renderWelcomeModels();
+  closeDropdowns();
+  if (APP.chats[APP.currentChatId]) { APP.chats[APP.currentChatId].model = id; saveChat(APP.chats[APP.currentChatId]); }
+  renderTopbar();
+}
+function selectPersona(key) {
+  APP.currentPreset = key;
+  $('personaBtnLabel').textContent = PERSONAS[key].name;
+  renderPersonaDropdown();
+  closeDropdowns();
+  renderMessages();
+  if (APP.chats[APP.currentChatId]) { APP.chats[APP.currentChatId].persona = key; saveChat(APP.chats[APP.currentChatId]); }
+  renderTopbar();
+}
+
+/* â”€â”€â”€ COMPOSER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+function handleInputChange(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 180) + 'px';
+  $('charCount').textContent = el.value.length ? `${el.value.length}/4000` : '';
+  $('composerHint').style.display = el.value.length>3900 ? 'none' : '';
+}
+function handleKeydown(e) {
+  if (e.key==='Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+}
+function toggleImageMode() {
+  APP.imageMode = !APP.imageMode;
+  $('imageToggleBtn').classList.toggle('active', APP.imageMode);
+  $('composerHint').textContent = APP.imageMode ? 'Image mode ON â€” prompts will generate images' : 'Google AI Studio Â· OpenRouter Â· Groq Â· Multimodal';
+  toast(APP.imageMode ? 'Image generation mode ON' : 'Normal chat mode', 'info');
+}
+function insertEmoji(e) {
+  const t = $('userInput');
+  const s = t.selectionStart ?? t.value.length;
+  t.value = t.value.slice(0,s) + e + t.value.slice(t.selectionEnd ?? s);
+  t.focus(); t.selectionStart = t.selectionEnd = s + e.length;
+  handleInputChange(t);
+}
+let starsOnlyMode = false;
+function toggleStarsOnly() {
+  starsOnlyMode = !starsOnlyMode;
+  $('composerHint').textContent = starsOnlyMode ? 'Showing starred messages only' : 'Google AI Studio Â· OpenRouter Â· Groq Â· Multimodal';
+  renderMessages();
+  toast(starsOnlyMode ? 'Starred view ON' : 'Starred view OFF', 'info');
+}
+function toggleStar(id) {
+  const chat = APP.chats[APP.currentChatId];
+  const msg = (chat?.messages||[]).find(m=>m.id===id);
+  if (!msg) return;
+  msg.starred = !msg.starred;
+  saveChat(chat, true);
+  renderMessages();
+  toast(msg.starred ? 'Message starred' : 'Star removed', 'info', 1600);
+}
+function downloadAllImages() {
+  const chat = APP.chats[APP.currentChatId];
+  const imgs = (chat?.messages||[]).flatMap(m => (m.images||[]).filter(i=>i.indexOf('data:')===0));
+  if (!imgs.length) return toast('No downloadable images in this chat','error');
+  toast('Downloading ' + imgs.length + ' images…','info');
+  imgs.forEach((src, i) => setTimeout(() => downloadDataUrl(src, `karvion-${Date.now()}-${i+1}`), i*450));
+}
+let stopRequested = false;
+function stopGeneration() {
+  stopRequested = true;
+  $('stopBtn').style.display = 'none';
+  $('sendBtn').style.display = '';
+  toast('Generation stopped','info');
+}
+function imaginePrompt(promptText) {
+  const text = (promptText||'').trim() || 'a beautiful scene';
+  const chat = getOrCreateChat();
+  if (!chat.model) chat.model = APP.model;
+  if (!chat.persona) chat.persona = APP.currentPreset;
+  const userMsg = { id: uid(), role:'user', content: text, time:now() };
+  chat.messages.push(userMsg);
+  chat.updatedAt = Date.now();
+  renderMessages(); renderChatList(); saveChat(chat, true);
+  generateImage(text);
+}
+function searchChat(term) {
+  const chat = APP.chats[APP.currentChatId];
+  if (!chat) return 0;
+  const q = (term||'').trim().toLowerCase();
+  let count = 0;
+  (chat.messages||[]).forEach(m => {
+    if (q && (m.content||'').toLowerCase().includes(q)) { count++; m._hl = true; } else m._hl = false;
+  });
+  if (q) {
+    if (count) {
+      const first = (chat.messages||[]).find(m=>m._hl);
+      renderMessages();
+      const el = first && document.querySelector(`[data-msg-id="${first.id}"]`);
+      if (el) { el.scrollIntoView({ behavior:'smooth', block:'center' }); el.style.animation='hlPulse 2s ease'; setTimeout(()=>el.style.animation='',2100); }
+      toast(count + ' match' + (count>1?'es':'') + ' found','success',2200);
+    } else toast('No matches for "' + q + '"','error');
+  } else { (chat.messages||[]).forEach(m=>m._hl=false); renderMessages(); }
+  return count;
+}
+function chatStats() {
+  const chat = APP.chats[APP.currentChatId];
+  const msgs = chat?.messages||[];
+  const user = msgs.filter(m=>m.role==='user').length;
+  const ai = msgs.filter(m=>m.role==='ai').length;
+  const words = msgs.reduce((n,m)=>n+wordCount(m.content||''),0);
+  const chars = msgs.reduce((n,m)=>n+(m.content||'').length,0);
+  const imgs = msgs.reduce((n,m)=>n+(m.images?.length||0),0);
+  toast(`📊 ${user} you · ${ai} KarvionAI · ${words} words · ${chars} chars · ${imgs} images`, 'info', 5000);
+}
+function handleFiles(files) {
+  Array.from(files).forEach(f => APP.uploadedFiles.push(f));
+  updateFilePreviews();
+}
+function updateFilePreviews() {
+  $('filePreviews').innerHTML = APP.uploadedFiles.map((f,i) => `
+    <div class="file-pill"><i class="fa-solid fa-file"></i> ${escapeHtml(f.name)} <button onclick="removeFile(${i})"><i class="fa-solid fa-xmark"></i></button></div>`).join('');
+}
+function removeFile(i) { APP.uploadedFiles.splice(i,1); updateFilePreviews(); }
+
+/* â”€â”€â”€ SEND / AI â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+function getOrCreateChat() {
+  if (APP.chats[APP.currentChatId]) return APP.chats[APP.currentChatId];
+  const chat = { id: uid(), title:'New chat', messages:[], createdAt: Date.now(), updatedAt: Date.now(), model: APP.model, persona: APP.currentPreset };
+  APP.chats[chat.id] = chat;
+  APP.currentChatId = chat.id;
+  updateChatUrl(chat.id);
+  return chat;
+}
+
+function autoTitle(chat) {
+  if (!chat) return;
+  if (chat.title && chat.title !== 'New chat') return;
+  const firstUser = (chat.messages||[]).find(m=>m.role==='user');
+  const text = (firstUser?.content||'').replace(/\s+/g,' ').trim();
+  if (!text) return;
+  const fallback = text.length > 42 ? text.slice(0,42) + 'â€¦' : text;
+  chat.title = fallback;
+  renderChatList();
+  renderTopbar();
+  if (!CONFIG.GEMINI_KEY) return;
+  (async () => {
+    try {
+      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${CONFIG.TITLE_MODEL}:generateContent?key=${CONFIG.GEMINI_KEY}`, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({
+          contents:[{ role:'user', parts:[{ text:`Write a catchy short chat title (max 6 words, plain text, no quotes or hashtags) for a conversation that starts with: "${text.slice(0,200)}"` }] }],
+          generationConfig:{ temperature:0.4, maxOutputTokens:24 }
+        }),
+        signal: AbortSignal.timeout(25000)
+      });
+      if (!res.ok) return;
+      const data = await res.json();
+      const t = (data.candidates?.[0]?.content?.parts||[]).map(p=>p.text||'').join('').replace(/["'â€œâ€â€˜â€™#*]/g,'').replace(/\s+/g,' ').trim().slice(0,48);
+      if (t && chat.title === fallback) {
+        chat.title = t;
+        renderChatList();
+        renderTopbar();
+        saveChat(chat, true);
+        toast('Chat titled: ' + t, 'success', 2200);
+      }
+    } catch(e) {}
+  })();
+}
+
+async function detectIntent(text) {
+  try {
+    if (!CONFIG.GEMINI_KEY) return 'message';
+    const prompt = `You are an intent classifier for an AI chat app. Decide if the user's message is a request to CREATE/MAKE an image, or a normal chat message / question.
+Rules:
+- Image request if the user wants to generate, draw, create, make, or show a picture/photo/image of something, in ANY language (including Hindi/Hinglish like "ek kutte ki image bano", "aak ka photo banao", "cat ki pic banao").
+- A plain question about images (like "what is a png?") is NOT an image request.
+- A greeting or normal question is NOT an image request.
+Reply with exactly one word: "image" or "message". No extra text.
+Message: ${text.slice(0,400)}`;
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${CONFIG.TITLE_MODEL}:generateContent?key=${CONFIG.GEMINI_KEY}`, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        contents:[{ role:'user', parts:[{ text: prompt }] }],
+        generationConfig:{ temperature:0, maxOutputTokens:8 }
+      }),
+      signal: AbortSignal.timeout(15000)
+    });
+    if (!res.ok) return 'message';
+    const data = await res.json();
+    const ans = (data.candidates?.[0]?.content?.parts||[]).map(p=>p.text||'').join('').trim().toLowerCase();
+    return ans.includes('image') ? 'image' : 'message';
+  } catch(e) {
+    console.warn('Intent detection failed:', e.message);
+    return 'message';
+  }
+}
+
+async function sendMessage() {
+  const textarea = $('userInput');
+  const text = textarea.value.trim();
+  if (!text || APP.isLoading) return;
+  if (text.startsWith('/')) { handleCommand(text); textarea.value=''; handleInputChange(textarea); return; }
+
+  const chat = getOrCreateChat();
+  if (!chat.model) chat.model = APP.model;
+  if (!chat.persona) chat.persona = APP.currentPreset;
+
+  textarea.value=''; textarea.style.height='auto'; handleInputChange(textarea);
+  const files = [...APP.uploadedFiles]; APP.uploadedFiles=[]; updateFilePreviews();
+
+  const userMsg = { id: uid(), role:'user', content:text, time:now() };
+  if (files.length) {
+    userMsg.files = files.map(f=>({name:f.name,type:f.type}));
+    userMsg.content += '\n\n[Attached: ' + files.map(f=>f.name).join(', ') + ']';
+    userMsg.images = [];
+    await Promise.all(files.map(f => fileToDataUrl(f).then(d => userMsg.images.push(d.dataUrl)).catch(()=>{})));
+  }
+  chat.messages.push(userMsg);
+  chat.updatedAt = Date.now();
+  if (typeof PREFS!=='undefined' && PREFS.sounds) playSound('send');
+
+  const isImageRequest = !camActive && (APP.imageMode
+    || /\b(generate|create|make|draw|paint|render|show|illustrate|design)\s+(a|an|the|me|some)?\s*(image|picture|photo|illustration|artwork|drawing|portrait|painting|thumbnail|banner|logo)/i.test(text)
+    || /\b(image of|picture of|photo of)\b/i.test(text));
+
+  renderMessages();
+  renderChatList();
+  saveChat(chat, true);
+
+  const intent = isImageRequest ? 'image' : await detectIntent(text);
+  if (intent === 'image') await generateImage(text);
+  else await callAI(text, files);
+
+  const liveChat = APP.chats[APP.currentChatId];
+  if (liveChat) {
+    if (typeof PREFS==='undefined' || PREFS.autoTitle) autoTitle(liveChat);
+    liveChat.updatedAt = Date.now();
+    saveChat(liveChat, true);
+  }
+  renderChatList();
+}
+
+function handleCommand(text) {
+  const [cmd, ...rest] = text.slice(1).split(/\s+/);
+  const arg = rest.join(' ');
+  switch(cmd) {
+    case 'new': startNewChat(); toast('New chat created'); break;
+    case 'clear': clearChat(); break;
+    case 'rename': if (arg && APP.chats[APP.currentChatId]) { APP.chats[APP.currentChatId].title = arg; saveChat(APP.chats[APP.currentChatId]); renderChatList(); renderTopbar(); } break;
+    case 'model': { const m = MODELS.find(x=>x.name.toLowerCase().includes(arg.toLowerCase())||x.id.toLowerCase().includes(arg.toLowerCase())); if(m) selectModel(m.id); else toast('Model not found. Try: /model llama','error'); break; }
+    case 'persona': { const k = Object.keys(PERSONAS).find(x=>x.toLowerCase()===arg.toLowerCase()); if(k) selectPersona(k); else toast('Persona not found. Try: /persona coder','error'); break; }
+    case 'image': toggleImageMode(); break;
+    case 'imagine': if (arg) { imaginePrompt(arg); } else toast('Usage: /imagine <prompt>','error'); break;
+    case 'search': case 'find': searchChat(arg); break;
+    case 'stats': chatStats(); break;
+    case 'export': exportChat(); break;
+    case 'stars': toggleStarsOnly(); break;
+    case 'download': downloadAllImages(); break;
+    case 'help': toast('Commands: /new /clear /rename <title> /model <name> /persona <name> /image /imagine <prompt> /search <term> /stats /export /stars /download /help','info',7000); break;
+    default: toast('Unknown command. Try /help','error');
+  }
+}
+
+function useQuickPrompt(btn) {
+  $('userInput').value = btn.textContent.replace(/^\S+\s/,'');
+  handleInputChange($('userInput'));
+  $('userInput').focus();
+}
+
+
+
+async function callAI(userText, files=[], isRegen=false) {
+  const chat = APP.chats[APP.currentChatId];
+  if (!chat) return;
+  APP.isLoading = true;
+  APP.streamingChatId = chat.id;
+  stopRequested = false;
+  $('sendBtn').disabled = true;
+  const stopBtn = $('stopBtn');
+  if (stopBtn) { stopBtn.style.display = ''; $('sendBtn').style.display = 'none'; }
+
+  const persona = PERSONAS[APP.currentPreset] || PERSONAS.default;
+  let systemPrompt = persona.prompt || DEFAULT_PROMPT;
+  if (voiceActive) {
+    systemPrompt = (systemPrompt ? systemPrompt + '\n\n' : '') +
+      'You are currently in a LIVE VOICE CHAT. Respond ONLY in plain, natural, conversational spoken language. ' +
+      'NO markdown, NO asterisks, NO bold, NO bullet points, NO headings, NO code fences — just clean, natural sentences ' +
+      'as if speaking aloud. Keep answers short, friendly and to the point. ' +
+      'Use markdown/formatting ONLY when the user is typing in text mode (never in voice mode). ' +
+      'Match your spoken language to the user: reply in English by default, but if the user speaks in another language (like Hindi), reply in that language.';
+    if (camActive) {
+      systemPrompt += '\n\nThe user has turned ON their live camera and is sharing what they see right now, like a live video call. A fresh photo from their camera is attached with each message. LOOK at the attached image and answer their question about what you see — the objects, surroundings, people, text, or scene in the photo. Be natural and conversational.';
+    }
+  }
+  const history = (chat.messages||[]).slice(-20).filter(m=>m.role==='user'||m.role==='ai');
+
+  const aiMsg = { id: uid(), role:'ai', content:'', time:now() };
+  chat.messages.push(aiMsg);
+  renderMessages();
+
+  // read attached files â†’ base64 for real multimodal
+  const fileData = [];
+  for (const f of files) {
+    try { fileData.push(await fileToDataUrl(f)); } catch(e) { console.warn('File read failed:', f.name, e.message); }
+  }
+  if (APP.voiceCamFrame) {
+    fileData.push({ dataUrl: APP.voiceCamFrame, base64: String(APP.voiceCamFrame).split(',')[1] || '', mimeType: 'image/jpeg' });
+    APP.voiceCamFrame = null;
+  }
+
+  // attempt chain: selected model â†’ all OpenRouter free models â†’ Groq last
+  const selected = MODELS.find(m=>m.id===APP.model) || MODELS[0];
+  const attemptChain = [];
+  if (selected.provider === 'Gemini') attemptChain.push({ kind:'gemini', model: selected.id });
+  else attemptChain.push({ kind:'openrouter', model: selected.id });
+  MODELS.forEach(m => {
+    if (m.provider === 'OpenRouter' && !attemptChain.some(a=>a.model===m.id)) attemptChain.push({ kind:'openrouter', model: m.id });
+  });
+  if (!attemptChain.some(a=>a.kind==='gemini') && CONFIG.GEMINI_KEY) attemptChain.unshift({ kind:'gemini', model:'gemini-3.6-flash' });
+  attemptChain.push({ kind:'groq', model:'llama-3.3-70b-versatile' });
+
+  let lastErr = null, ok = false, orDead = false;
+  for (const att of attemptChain) {
+    if (ok) break;
+    if (att.kind === 'openrouter' && orDead) continue;
+    try {
+      ok = await runProviderAttempt(att, userText, systemPrompt, history, fileData, aiMsg);
+    } catch(e) {
+      lastErr = e;
+      if (att.kind === 'openrouter' && (e.status === 401 || e.status === 403)) orDead = true;
+      console.warn('Provider failed ['+att.kind+' / '+att.model+']:', e.message);
+    }
+  }
+
+  if (!ok) {
+    aiMsg.content = '';
+    aiMsg.htmlContent = '<div class="error-block"><div class="error-title"><i class="fa-solid fa-triangle-exclamation"></i> Error</div><div class="error-msg">' + escapeHtml((lastErr&&lastErr.message)||'All providers failed') + '</div><button class="msg-action-btn" onclick="copyError(this)"><i class="fa-solid fa-copy"></i> Copy</button></div>';
+    toast('AI error: ' + ((lastErr&&lastErr.message)||'All providers failed').slice(0,60), 'error');
+    if (typeof PREFS!=='undefined' && PREFS.sounds) playSound('error');
+  }
+
+  APP.isLoading = false;
+  APP.streamingChatId = null;
+  stopRequested = false;
+  $('sendBtn').disabled = false;
+  if (stopBtn) { stopBtn.style.display = 'none'; $('sendBtn').style.display = ''; }
+  showTyping(false);
+  renderMessages();
+  chat.updatedAt = Date.now();
+  saveChat(chat, true);
+  renderChatList();
+  scrollBottom();
+  if (typeof PREFS!=='undefined' && PREFS.autoRead && aiMsg.content && !aiMsg.htmlContent && !voiceActive) speakText(aiMsg.content);
+}
+
+function fileToDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const r = new FileReader();
+    r.onload = () => {
+      const dataUrl = r.result;
+      const base64 = String(dataUrl).split(',')[1] || '';
+      const mime = file.type || (String(dataUrl).match(/^data:([^;]+);/)?.[1]) || 'application/octet-stream';
+      resolve({ dataUrl, base64, mimeType: mime });
+    };
+    r.onerror = () => reject(r.error);
+    r.readAsDataURL(file);
+  });
+}
+
+async function runProviderAttempt(att, userText, systemPrompt, history, fileData, aiMsg) {
+  const streamIt = typeof PREFS==='undefined' || PREFS.streaming;
+  let text;
+  if (att.kind === 'gemini') {
+    text = await geminiChat(att.model, userText, systemPrompt, history, fileData, aiMsg, streamIt);
+  } else if (att.kind === 'openrouter') {
+    text = await openaiChat('https://openrouter.ai/api/v1/chat/completions', CONFIG.OR_KEY, att.model, userText, systemPrompt, history, fileData, aiMsg, streamIt, true);
+  } else {
+    text = await openaiChat('https://api.groq.com/openai/v1/chat/completions', CONFIG.GROQ_KEY, att.model, userText, systemPrompt, history, [], aiMsg, streamIt, false);
+  }
+  aiMsg.content = text || '(No response)';
+  return true;
+}
+
+async function geminiChat(model, userText, systemPrompt, history, fileData, aiMsg, streamIt) {
+  const parts = [{ text: userText }];
+  fileData.forEach(d => parts.push({ inline_data: { mime_type: d.mimeType, data: d.base64 } }));
+  const body = {
+    contents: [
+      ...history.map(h => ({ role: h.role==='ai'?'model':'user', parts: [{ text: h.content }] })),
+      { role: 'user', parts }
+    ],
+    systemInstruction: { parts: [{ text: systemPrompt }] },
+    generationConfig: { temperature: APP.temperature, maxOutputTokens: APP.maxTokens }
+  };
+  const endpoint = streamIt ? 'streamGenerateContent?alt=sse' : 'generateContent';
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:${endpoint}&key=${CONFIG.GEMINI_KEY}`;
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+    signal: AbortSignal.timeout(120000)
+  });
+  if (!res.ok) {
+    let msg = 'Gemini HTTP ' + res.status;
+    try { const data = await res.json(); msg = (data.error && data.error.message) || msg; } catch(e) {}
+    throw new Error(msg);
+  }
+
+  let full = '';
+  if (streamIt) {
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+    while (true) {
+      if (stopRequested) { reader.cancel && reader.cancel(); break; }
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop();
+      for (const line of lines) {
+        if (!line.startsWith('data:')) continue;
+        const raw = line.slice(5).trim();
+        if (!raw || raw === '[DONE]') continue;
+        try {
+          const p = JSON.parse(raw);
+          const deltas = (p.candidates?.[0]?.content?.parts || []).map(pp => pp.text || '').join('');
+          if (deltas) {
+            full += deltas;
+            aiMsg.content = full;
+            const msgEl = document.querySelector(`[data-msg-id="${aiMsg.id}"] .bubble`);
+            if (msgEl) { msgEl.innerHTML = renderMarkdown(full) + '<span class="stream-caret"></span>'; scrollBottom(); }
+            if (voiceActive && typeof streamVoiceQueue !== 'undefined') { streamVoiceQueue.push(deltas); updateVoiceTranscript(full); }
+          }
+        } catch(e) {}
+      }
+    }
+  } else {
+    full = (data.candidates?.[0]?.content?.parts || []).map(pp => pp.text || '').join('');
+    aiMsg.content = full;
+    if (voiceActive && typeof streamVoiceQueue !== 'undefined') { streamVoiceQueue.push(full); }
+  }
+  if (voiceActive && typeof streamVoiceQueue !== 'undefined') streamVoiceQueue.finish();
+  return full;
+}
+
+async function openaiChat(url, key, model, userText, systemPrompt, history, fileData, aiMsg, streamIt, isOpenRouter) {
+  const messages = [{ role: 'system', content: systemPrompt }];
+  history.forEach(h => messages.push({ role: h.role==='ai'?'assistant':'user', content: h.content }));
+  const userContent = fileData.length
+    ? [{ type:'text', text: userText }, ...fileData.map(d => ({ type:'image_url', image_url:{ url: d.dataUrl } }))]
+    : userText;
+  messages.push({ role: 'user', content: userContent });
+
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type':'application/json', 'Authorization':'Bearer '+key, ...(isOpenRouter?{'HTTP-Referer':'https://karvionai.netlify.app','X-Title':'Karvion AI'}:{}) },
+    body: JSON.stringify({ model, messages, temperature: APP.temperature, max_tokens: APP.maxTokens, stream: streamIt }),
+    signal: AbortSignal.timeout(120000)
+  });
+  if (!res.ok) {
+    const err = new Error(((res.status===401) ? 'Auth failed (invalid key)' : ('HTTP ' + res.status)));
+    try { const data = await res.json(); err.message = (data.error && (data.error.message || data.error)) || err.message; } catch(e) {}
+    err.status = res.status;
+    throw err;
+  }
+
+  let full = '';
+  if (streamIt) {
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+    while (true) {
+      if (stopRequested) { reader.cancel && reader.cancel(); break; }
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop();
+      for (const line of lines) {
+        if (!line.startsWith('data:')) continue;
+        const raw = line.slice(5).trim();
+        if (!raw || raw === '[DONE]') continue;
+        try {
+          const parsed = JSON.parse(raw);
+          const delta = parsed.choices?.[0]?.delta?.content || '';
+          if (delta) {
+            full += delta;
+            aiMsg.content = full;
+            const msgEl = document.querySelector(`[data-msg-id="${aiMsg.id}"] .bubble`);
+            if (msgEl) { msgEl.innerHTML = renderMarkdown(full) + '<span class="stream-caret"></span>'; scrollBottom(); }
+            if (voiceActive && typeof streamVoiceQueue !== 'undefined') { streamVoiceQueue.push(delta); updateVoiceTranscript(full); }
+          }
+        } catch(e) {}
+      }
+    }
+  } else {
+    full = data.choices?.[0]?.message?.content || '';
+    aiMsg.content = full;
+    if (voiceActive && typeof streamVoiceQueue !== 'undefined') { streamVoiceQueue.push(full); }
+  }
+  if (voiceActive && typeof streamVoiceQueue !== 'undefined') streamVoiceQueue.finish();
+  return full;
+}
+
+function showTyping(show) {
+  const tw = $('typingWrapper');
+  tw.classList.toggle('show', show);
+  if (show) scrollBottom();
+}
+
+/* â”€â”€â”€ IMAGE GENERATION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+async function generateImage(prompt) {
+  const chat = APP.chats[APP.currentChatId];
+  if (!chat) return;
+  const aiMsg = { id: uid(), role:'ai', content:'', time:now() };
+  chat.messages.push(aiMsg);
+
+  const updateBubble = (html) => {
+    const msgEl = document.querySelector(`[data-msg-id="${aiMsg.id}"] .bubble`);
+    if (msgEl) { msgEl.innerHTML = html; scrollBottom(); }
+  };
+  renderMessages();
+  updateBubble(`<div class="gen-progress"><div class="gen-spinner"></div> <span>Starting image generationâ€¦</span></div>`);
+
+  const cleanPrompt = prompt.replace(/\b(generate|create|make|draw|paint|render|show|illustrate|design|banao|bana|banaao|banao)\s+(a|an|the|me|some|ek|aik|meri|mujhe)?\s*(image|picture|photo|illustration|artwork|drawing|portrait|painting|thumbnail|banner|logo|pic|photo|tasveer|foto|pic)\s*(of|showing|depicting|ki|ka|ke|kii)?\s*/i,'').replace(/\b(ka|ki|ke|ko|ki|kaa|kara)\b/i,' ').replace(/\s+/g,' ').trim() || prompt;
+  const enrichedPrompt = `High quality, photorealistic, detailed image of: ${cleanPrompt}. Professional photography, beautiful composition, stunning visuals, 8K resolution.`;
+
+  let success = false;
+  const markSuccess = (content, images, providerLabel) => {
+    aiMsg.content = content;
+    aiMsg.images = images;
+    renderMessages();
+    success = true;
+    toast(providerLabel, 'success');
+    if (images && images[0] && images[0].indexOf('data:') === 0 && (typeof PREFS==='undefined' || PREFS.autoDownloadImage)) {
+      setTimeout(() => { const el = document.querySelector(`[data-msg-id="${aiMsg.id}"] .gen-dl-btn`); if (el) el.click(); else downloadDataUrl(images[0]); }, 600);
+    }
+    if (typeof PREFS!=='undefined' && PREFS.autoRead) speakText(content);
+  };
+
+    // Provider 1: Cloudflare Workers AI â€” PRIMARY (proxy via your worker)
+  if (!success && CONFIG.CLOUDFLARE && !/YOUR-ACCOUNT/.test(CONFIG.CLOUDFLARE)) {
+    try {
+      updateBubble(`<div class="gen-progress"><div class="gen-spinner"></div> <span>Generating with ${IMAGE_MODEL_NAME}...</span></div>`);
+      const res = await fetch(CONFIG.CLOUDFLARE + 'ai-image', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt: enrichedPrompt }),
+        signal: AbortSignal.timeout(60000)
+      });
+      if (!res.ok) throw new Error('Worker returned ' + res.status);
+      const data = await res.json();
+      const b64 = data && (data.image || (data.result && data.result.image) || (Array.isArray(data) && data[0]));
+      if (!b64) throw new Error('No image in worker response');
+      const mime = (data.mimeType || 'image/jpeg');
+      const dataUrl = b64.indexOf('data:') === 0 ? b64 : `data:${mime};base64,${b64}`;
+      markSuccess(
+        `🎨 Here's your image: **"${cleanPrompt}"**\n*(Generated with ${IMAGE_MODEL_NAME} · ${IMAGE_DAILY_LIMIT})*`,
+        [dataUrl],
+        `Image generated with ${IMAGE_MODEL_NAME}`
+      );
+    } catch(e) { console.warn('Cloudflare worker failed:', e.message); }
+  }
+
+    // Provider 2: Pollinations.ai â€” FALLBACK (free, keyless, no credit card needed)
+  if (!success) {
+    try {
+      updateBubble(`<div class="gen-progress"><div class="gen-spinner"></div> <span>Generating with Pollinations.ai...</span></div>`);
+      const encoded = encodeURIComponent(cleanPrompt);
+      const seed = Math.floor(Math.random()*99999);
+      const imgUrl = `${CONFIG.POLLINATIONS}${encoded}?width=1024&height=768&seed=${seed}&model=flux-pro&nologo=true&enhance=true`;
+      await new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = resolve;
+        img.onerror = reject;
+        img.src = imgUrl;
+        setTimeout(reject, 20000);
+      });
+      markSuccess(
+        `ðŸŽ¨ Here's your image: **"${cleanPrompt}"**\n*(Generated with Pollinations.ai)*`,
+        [imgUrl],
+        'Image generated with Pollinations AI'
+      );
+    } catch(e) { console.warn('Pollinations.ai failed:', e.message); }
+  }  // Provider 3: Gemini (Google AI Studio) â€” LAST FALLBACK (works only if your free API key has quota)
+  if (!success) {
+  for (const model of CONFIG.GEMINI_MODELS) {
+    if (success) break;
+    try {
+      updateBubble(`<div class="gen-progress"><div class="gen-spinner"></div> <span>Generating with Gemini AI (${model})â€¦</span></div>`);
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${CONFIG.GEMINI_KEY}`;
+      const res = await fetch(url, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ contents:[{ parts:[{ text: enrichedPrompt }] }], generationConfig:{ responseModalities:['TEXT','IMAGE'] } }),
+        signal: AbortSignal.timeout(30000)
+      });
+      const data = await res.json();
+      if (data.error) {
+        console.warn('Gemini error:', data.error.message);
+        if (data.error.status === 'RESOURCE_EXHAUSTED' || res.status === 429) console.warn('Gemini quota exhausted');
+        continue;
+      }
+      for (const c of (data.candidates||[])) {
+        for (const p of (c.content?.parts||[])) {
+          if (p.inlineData?.data) {
+            const mime = p.inlineData.mimeType || 'image/png';
+            markSuccess(
+              `ðŸŽ¨ Here's your AI-generated image: **"${cleanPrompt}"**\n*(Generated with ${model})*`,
+              [`data:${mime};base64,${p.inlineData.data}`],
+              'Image generated with Gemini AI!'
+            );
+            break;
+          }
+        }
+        if (success) break;
+      }
+    } catch(e) { console.warn('Gemini model failed:', model, e.message); }
+  }
+
+    }
+
+
+  if (!success) {
+    aiMsg.content = '';
+    aiMsg.htmlContent = `<div class="error-block"><div class="error-title"><i class="fa-solid fa-triangle-exclamation"></i> Image Generation Failed</div><div class="error-msg">All image providers failed. Please try again or rephrase your prompt.</div></div>`;
+    updateBubble(aiMsg.htmlContent);
+    toast('Image generation failed', 'error');
+  }
+
+  chat.updatedAt = Date.now();
+  saveChat(chat, true);
+  renderChatList();
+  scrollBottom();
+}
+
+function openImageViewer(src) {
+  const el = document.createElement('div');
+  el.style.cssText = 'position:fixed;inset:0;z-index:400;background:rgba(0,0,0,0.9);display:flex;align-items:center;justify-content:center;cursor:zoom-out';
+  el.innerHTML = `<img src="${src}" style="max-width:92vw;max-height:92vh;border-radius:12px" />`;
+  el.onclick = () => el.remove();
+  document.body.appendChild(el);
+}
+
+function downloadDataUrl(src, name) {
+  return new Promise((resolve) => {
+    try {
+      let blob;
+      if (src.indexOf('data:') === 0) {
+        const m = src.match(/^data:([^;]+);base64,(.+)$/);
+        if (!m) { resolve(false); return; }
+        const bin = atob(m[2]);
+        const arr = new Uint8Array(bin.length);
+        for (let i=0;i<bin.length;i++) arr[i] = bin.charCodeAt(i);
+        blob = new Blob([arr], { type: m[1] });
+      } else {
+        fetch(src).then(r => r.blob()).then(b => { downloadBlob(b, name||'karvion-image'); resolve(true); }).catch(()=>resolve(false));
+        return;
+      }
+      downloadBlob(blob, name || 'karvion-image');
+      resolve(true);
+    } catch(e) { console.warn('Download failed:', e); resolve(false); }
+  });
+}
+function downloadBlob(blob, name) {
+  const ext = (blob.type === 'image/png' ? 'png' : blob.type === 'image/webp' ? 'webp' : 'jpg');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `${name}.${ext}`;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+  toast('Image downloaded to Downloads folder','success');
+}
+async function downloadImage(msgId) {
+  const chat = APP.chats[APP.currentChatId];
+  const msg = (chat.messages||[]).find(m => m.id === msgId);
+  const src = msg && msg.images && msg.images[0];
+  if (!src) return toast('No image found','error');
+  await downloadDataUrl(src, `karvion-${Date.now()}`);
+}
+
+/* â”€â”€â”€ VOICE / TTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+let recognition = null;
+function toggleVoiceInput() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) return toast('Voice input not supported in this browser','error');
+  const btn = $('voiceBtn');
+  if (recognition) { recognition.stop(); recognition=null; btn.classList.remove('active'); return; }
+  recognition = new SR();
+  recognition.continuous = true;
+  recognition.interimResults = true;
+  recognition.lang = 'en-US';
+  recognition.onresult = e => {
+    const transcript = Array.from(e.results).map(r=>r[0].transcript).join('');
+    const input = $('userInput');
+    input.value = transcript;
+    handleInputChange(input);
+  };
+  recognition.onend = () => { recognition=null; btn.classList.remove('active'); };
+  recognition.onerror = () => { recognition=null; btn.classList.remove('active'); };
+  recognition.start();
+  btn.classList.add('active');
+  toast('Listeningâ€¦ speak now','info');
+}
+function detectLang(text) {
+  return /[\u0900-\u097F]/.test(text || '') ? 'hi' : 'en';
+}
+function pickVoice(text) {
+  if (!window.speechSynthesis) return null;
+  const voices = window.speechSynthesis.getVoices();
+  if (!voices.length) return null;
+  const hasHindi = /[\u0900-\u097F]/i.test(text || '');
+  const score = v => {
+    const name = (v.name||'').toLowerCase();
+    const lang = (v.lang||'').toLowerCase();
+    let s = 0;
+    if (/online.*natural|natural.*online|natural/i.test(name)) s += 60;
+    if (/edge|microsoft/i.test(name)) s += 15;
+    if (/neural/i.test(name)) s += 12;
+    if (hasHindi) {
+      if (/swara|neerja|meera|aarav|kavya|madhur|hemant|prabhat/i.test(name)) s += 40;
+      if (lang.startsWith('hi')) s += 25;
+    } else {
+      if (/aria|jenny|guy|emma|tom|sonia|neerja/i.test(name)) s += 25;
+      if (lang.startsWith('en-in')) s += 22;
+      else if (lang.startsWith('en')) s += 18;
+    }
+    if (/premium|\(in\)|\(us\)|\(gb\)|\(au\)|\(canada\)/i.test(name)) s += 8;
+    return s;
+  };
+  let best = null, bestScore = -1;
+  voices.forEach(v => {
+    if (hasHindi && !(score(v) > 0)) return;
+    const s = score(v);
+    if (s > bestScore) { bestScore = s; best = v; }
+  });
+  return best || voices[0];
+}
+
+/* ————— GOOGLE CLOUD TTS (natural neural voices via worker proxy) ————— */
+const gTTS = {
+  audio: null, busy: false, queue: [], cache: new Map(),
+  enabled() {
+    return !!CONFIG.GOOGLE_TTS && !!CONFIG.CLOUDFLARE && !/YOUR-ACCOUNT/.test(CONFIG.CLOUDFLARE);
+  },
+  voiceFor(text) {
+    if (/[\u0900-\u097F]/.test(text||'')) return CONFIG.TTS_VOICE_HI;
+    return CONFIG.TTS_VOICE_EN_IN || CONFIG.TTS_VOICE_EN;
+  },
+  async synth(text) {
+    const key = text + '|' + (this.voiceFor(text));
+    if (this.cache.has(key)) return this.cache.get(key);
+    const res = await fetch(CONFIG.CLOUDFLARE + 'tts', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ text, lang: this.voiceFor(text).slice(0,5) }),
+      signal: AbortSignal.timeout(20000)
+    });
+    if (!res.ok) throw new Error('TTS HTTP ' + res.status);
+    const data = await res.json();
+    if (!data.audio) throw new Error('No audio');
+    const blob = await (await fetch('data:audio/mpeg;base64,' + data.audio)).blob();
+    const url = URL.createObjectURL(blob);
+    if (this.cache.size > 40) { this.cache.clear(); }
+    this.cache.set(key, url);
+    return url;
+  },
+  async play(text, onStart, onBlip, onEnd) {
+    const clean = (text||'').replace(/[#*`>_]/g,'').replace(/\s+/g,' ').trim().slice(0,4800);
+    if (!clean) { onEnd && onEnd(); return; }
+    if (typeof onStart === 'function') onStart();
+    try {
+      const url = await this.synth(clean);
+      const audio = this.audio || (this.audio = new Audio());
+      audio.src = url;
+      const blipT = setInterval(() => onBlip && onBlip(), 160);
+      audio.onended = () => { clearInterval(blipT); if (onEnd) onEnd(); };
+      audio.onerror = () => { clearInterval(blipT); if (onEnd) onEnd(); };
+      await audio.play().catch(()=>{});
+    } catch(e) {
+      console.warn('Google TTS failed, using premium voice:', e.message);
+      CONFIG.GOOGLE_TTS = false;
+      this.queue = [];
+      gtTTS.play(clean, onStart, onBlip, onEnd);
+    }
+  }
+};
+
+/* ————— GOOGLE TRANSLATE TTS (free premium voice, keyless) ————— */
+const gtTTS = {
+  audio: null,
+  enabled() {
+    return true;
+  },
+  langFor(text) {
+    if (/[\u0900-\u097F]/.test(text||'')) return 'hi';
+    return 'en';
+  },
+  urlFor(text) {
+    return 'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=' + this.langFor(text) + '&q=' + encodeURIComponent(text);
+  },
+  makeAudio() {
+    if (!this.audio) { this.audio = new Audio(); this.audio.referrerPolicy = 'no-referrer'; }
+    return this.audio;
+  },
+  prime() {
+    this.makeAudio();
+    try {
+      const s = 'RIFF\x2c\x00\x00\x00WAVEfmt \x10\x00\x00\x00\x01\x00\x01\x00\x40\x1f\x00\x00\x40\x1f\x00\x00\x01\x00\x08\x00data\x08\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00';
+      const b = new Uint8Array(s.length);
+      for (let i = 0; i < s.length; i++) b[i] = s.charCodeAt(i);
+      const a = this.audio;
+      a.src = 'data:audio/wav;base64,' + btoa(String.fromCharCode.apply(null, b));
+      const p = a.play();
+      if (p) p.catch(()=>{});
+    } catch(e){}
+  },
+  split(text, max) {
+    const out = []; let t = (text||'').trim();
+    while (t.length > max) {
+      let cut = t.lastIndexOf(' ', max);
+      if (cut < 60) cut = max;
+      out.push(t.slice(0, cut).trim());
+      t = t.slice(cut).trim();
+    }
+    if (t) out.push(t);
+    return out;
+  },
+  async play(text, onStart, onBlip, onEnd) {
+    const clean = (text||'').replace(/[#*`>_]/g,'').replace(/\s+/g,' ').trim();
+    if (!clean) { if (onEnd) onEnd(); return; }
+    if (typeof onStart === 'function') onStart();
+    const chunks = this.split(clean, 190);
+    try {
+      for (let i = 0; i < chunks.length; i++) {
+        const audio = this.makeAudio();
+        audio.src = this.urlFor(chunks[i]);
+        const err = await new Promise((resolve) => {
+          const blipT = setInterval(() => onBlip && onBlip(), 150);
+          const done = (e) => { clearInterval(blipT); resolve(e); };
+          audio.onended = () => done(false);
+          audio.onerror = () => done(true);
+          audio.play().catch(() => done(true));
+        });
+        if (err) {
+          console.warn('Google Translate TTS playback failed, using browser voice:', err);
+          synthSpeak(chunks.slice(i).join(' '), null, onBlip, onEnd);
+          return;
+        }
+      }
+      if (typeof onEnd === 'function') onEnd();
+    } catch(e) {
+      console.warn('Google Translate TTS failed, using browser voice:', e.message);
+      synthSpeak(clean, onStart, onBlip, onEnd);
+    }
+  }
+};
+
+/* ================= BROWSER SYNTH FALLBACK (always speaks) ================= */
+function synthSpeak(text, onStart, onBlip, onEnd) {
+  if (!window.speechSynthesis) { if (typeof onEnd === 'function') onEnd(); return; }
+  const synth = window.speechSynthesis;
+  synth.cancel();
+  const clean = (text||'').replace(/[#*`>_]/g,'').replace(/\s+/g,' ').trim().slice(0,1200);
+  if (!clean) { if (typeof onEnd === 'function') onEnd(); return; }
+  const done = () => {
+    if (window.KVAvatar) KVAvatar.setSpeaking(false);
+    if (window.KVGirl) KVGirl.setSpeaking(false);
+    setAvatarSpeaking(false);
+    if (typeof onEnd === 'function') onEnd();
+  };
+  const say = () => {
+    const utt = new SpeechSynthesisUtterance(clean);
+    const voice = pickVoice(clean);
+    if (voice) { utt.voice = voice; utt.lang = voice.lang || 'en-US'; }
+    utt.rate = (typeof PREFS!=='undefined' && PREFS.rate) ? PREFS.rate : 1;
+    utt.pitch = (typeof PREFS!=='undefined' && PREFS.pitch) ? PREFS.pitch : 1;
+    utt.onstart = () => { if (window.KVAvatar) KVAvatar.setSpeaking(true); if (window.KVGirl) KVGirl.setSpeaking(true); setAvatarSpeaking(true); };
+    utt.onboundary = () => { if (window.KVAvatar) KVAvatar.blip(); if (window.KVGirl) KVGirl.blip(); avatarBlip(); };
+    utt.onend = done;
+    utt.onerror = done;
+    synth.speak(utt);
+  };
+  if (synth.getVoices().length) say();
+  else {
+    const onCh = () => { synth.onvoiceschanged = null; say(); };
+    synth.onvoiceschanged = onCh;
+    setTimeout(() => { if (synth.onvoiceschanged === onCh) { synth.onvoiceschanged = null; say(); } }, 800);
+  }
+}
+
+function speakText(text, onEnd) {
+  if (gTTS.enabled()) {
+    gTTS.play(text,
+      () => { if (window.KVAvatar) KVAvatar.setSpeaking(true); if (window.KVGirl) KVGirl.setSpeaking(true); setAvatarSpeaking(true); },
+      () => { if (window.KVAvatar) KVAvatar.blip(); if (window.KVGirl) KVGirl.blip(); avatarBlip(); },
+      () => { if (window.KVAvatar) KVAvatar.setSpeaking(false); if (window.KVGirl) KVGirl.setSpeaking(false); setAvatarSpeaking(false); if (typeof onEnd==='function') onEnd(); }
+    );
+    return;
+  }
+  if (gtTTS.enabled()) {
+    gtTTS.play(text,
+      () => { if (window.KVAvatar) KVAvatar.setSpeaking(true); if (window.KVGirl) KVGirl.setSpeaking(true); setAvatarSpeaking(true); },
+      () => { if (window.KVAvatar) KVAvatar.blip(); if (window.KVGirl) KVGirl.blip(); avatarBlip(); },
+      () => { if (window.KVAvatar) KVAvatar.setSpeaking(false); if (window.KVGirl) KVGirl.setSpeaking(false); setAvatarSpeaking(false); if (typeof onEnd==='function') onEnd(); }
+    );
+    return;
+  }
+  if (!window.speechSynthesis) return;
+  const synth = window.speechSynthesis;
+  synth.cancel();
+  const clean = (text||'').replace(/[#*`>_]/g,'').replace(/\s+/g,' ').trim().slice(0,1200);
+  if (!clean) return;
+  const done = () => {
+    if (window.KVAvatar) KVAvatar.setSpeaking(false);
+    if (window.KVGirl) KVGirl.setSpeaking(false);
+    setAvatarSpeaking(false);
+    if (typeof onEnd === 'function') onEnd();
+  };
+  const say = () => {
+    const utt = new SpeechSynthesisUtterance(clean);
+    const voice = pickVoice(clean);
+    if (voice) { utt.voice = voice; utt.lang = voice.lang || 'en-US'; }
+    utt.rate = (typeof PREFS!=='undefined' && PREFS.rate) ? PREFS.rate : 1;
+    utt.pitch = (typeof PREFS!=='undefined' && PREFS.pitch) ? PREFS.pitch : 1;
+    utt.onstart = () => { if (window.KVAvatar) KVAvatar.setSpeaking(true); if (window.KVGirl) KVGirl.setSpeaking(true); setAvatarSpeaking(true); };
+    utt.onboundary = () => { if (window.KVAvatar) KVAvatar.blip(); if (window.KVGirl) KVGirl.blip(); avatarBlip(); };
+    utt.onend = done;
+    utt.onerror = done;
+    synth.speak(utt);
+  };
+  if (synth.getVoices().length) say();
+  else {
+    const onCh = () => { synth.onvoiceschanged = null; say(); };
+    synth.onvoiceschanged = onCh;
+    setTimeout(() => { if (synth.onvoiceschanged === onCh) { synth.onvoiceschanged = null; say(); } }, 800);
+  }
+}
+if (window.speechSynthesis) {
+  const refreshVoices = () => { speechSynthesis.getVoices(); };
+  refreshVoices();
+  speechSynthesis.onvoiceschanged = refreshVoices;
+  setInterval(refreshVoices, 3000);
+}
+
+/* ================= BEAUTIFUL GIRL AVATAR (canvas lip-sync) ================= */
+const KVGirl = (function(){
+  let cv = null, ctx = null, running = false, speaking = false;
+  let mouth = 0, blinkT = 0, blink = 0, idle = 0;
+  const DPR = Math.min(window.devicePixelRatio || 1, 2);
+  const W = 440, H = 440;
+  function ensure(){
+    if (ctx) return true;
+    cv = document.getElementById('avatarCanvas');
+    if (!cv) return false;
+    cv.width = W * DPR; cv.height = H * DPR;
+    ctx = cv.getContext('2d');
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+    return true;
+  }
+  function start(){ if (!ensure() || running) return; running = true; speaking = false; mouth = 0; blink = 1; blinkT = 2 + Math.random()*2; requestAnimationFrame(loop); }
+  function stop(){ running = false; speaking = false; mouth = 0; }
+  function setSpeaking(b){ speaking = b; if (b) blip(); }
+  function blip(){ mouth = Math.min(1, mouth + 0.45 + Math.random()*0.35); }
+  function loop(t){
+    if (!running) return;
+    mouth = Math.max(0.05, mouth - 0.028);
+    if (speaking && mouth < 0.3) mouth = Math.min(1, mouth + 0.55);
+    blinkT -= 0.016;
+    if (blinkT <= 0){ blink = 1; blinkT = blink > 0 ? 0.14 : 2 + Math.random()*3; }
+    if (blink > 0) blink -= 0.14;
+    idle += 0.02;
+    draw(t);
+    requestAnimationFrame(loop);
+  }
+  function eye(x, y, open){
+    ctx.save(); ctx.translate(x,y); ctx.scale(1, Math.max(0.08, open));
+    ctx.fillStyle = '#ffffff';
+    ctx.beginPath(); ctx.ellipse(0,0,22,13,0,0,Math.PI*2); ctx.fill();
+    const g = ctx.createRadialGradient(0,1,2,0,1,10);
+    g.addColorStop(0,'#8a6a3a'); g.addColorStop(0.6,'#5e4026'); g.addColorStop(1,'#3d2415');
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(0,1,9.5,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#160c06';
+    ctx.beginPath(); ctx.arc(0,1,4.6,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,0.95)';
+    ctx.beginPath(); ctx.arc(-3,-3,2.7,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(3,3.5,1.3,0,Math.PI*2); ctx.fill();
+    ctx.strokeStyle = '#221610'; ctx.lineWidth = 2.6; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(-22,-7); ctx.quadraticCurveTo(0,-21,22,-7); ctx.stroke();
+    ctx.strokeStyle = '#221610'; ctx.lineWidth = 1.8;
+    ctx.beginPath(); ctx.moveTo(-16,10); ctx.quadraticCurveTo(0,16,16,10); ctx.stroke();
+    ctx.restore();
+  }
+  function mouthY(x, y, open){
+    ctx.save(); ctx.translate(x,y);
+    const oh = 5 + open*17;
+    const lg = ctx.createLinearGradient(0,-6,0,7);
+    lg.addColorStop(0,'#d2687a'); lg.addColorStop(1,'#a94357');
+    ctx.fillStyle = lg;
+    ctx.beginPath();
+    ctx.moveTo(-26,0);
+    ctx.quadraticCurveTo(0,-7+open*3,26,0);
+    ctx.quadraticCurveTo(0,9+oh,-26,0);
+    ctx.closePath(); ctx.fill();
+    if (open > 0.12){
+      ctx.fillStyle = '#541f2c';
+      ctx.beginPath(); ctx.ellipse(0,2+oh*0.35,16,oh*0.72,0,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath(); ctx.ellipse(0,0,13,Math.max(2,oh*0.28),0,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle = '#e0737f';
+      ctx.beginPath(); ctx.ellipse(0,3+oh*0.55,9,oh*0.5,0,0,Math.PI*2); ctx.fill();
+    }
+    ctx.fillStyle = 'rgba(255,255,255,0.35)';
+    ctx.beginPath(); ctx.ellipse(-8,-1,4,2,0,0,Math.PI*2); ctx.fill();
+    ctx.restore();
+  }
+  function draw(t){
+    ctx.clearRect(0,0,W,H);
+    const sway = Math.sin(idle)*2.5;
+    const tilt = Math.sin(idle*0.7)*1.6;
+    const eyeOpen = blink > 0 ? Math.max(0.08, 1 - blink*0.85) : 1;
+    ctx.save();
+    ctx.translate(W/2 + sway, H/2 + 18);
+    ctx.rotate(tilt*Math.PI/180);
+
+    /* hair back — big volume + long strands */
+    ctx.fillStyle = '#2a1f18';
+    ctx.beginPath();
+    ctx.moveTo(-132,-118);
+    ctx.bezierCurveTo(-162,-58,-152,62,-122,150);
+    ctx.bezierCurveTo(-96,212,-44,236,0,240);
+    ctx.bezierCurveTo(44,236,96,212,122,150);
+    ctx.bezierCurveTo(152,62,162,-58,132,-118);
+    ctx.bezierCurveTo(96,-178,0,-190,-132,-118);
+    ctx.closePath(); ctx.fill();
+
+    /* neck + shoulders + top */
+    ctx.fillStyle = '#e9b48f';
+    ctx.beginPath();
+    ctx.moveTo(-30,96); ctx.lineTo(30,96); ctx.lineTo(34,150); ctx.lineTo(-34,150); ctx.closePath(); ctx.fill();
+    const topG = ctx.createLinearGradient(0,120,0,240);
+    topG.addColorStop(0,'#0e3a2a'); topG.addColorStop(1,'#06211a');
+    ctx.fillStyle = topG;
+    ctx.beginPath();
+    ctx.moveTo(-92,150); ctx.quadraticCurveTo(-84,118,-34,150);
+    ctx.lineTo(-34,240); ctx.lineTo(34,240); ctx.lineTo(34,150);
+    ctx.quadraticCurveTo(84,118,92,150); ctx.lineTo(92,240); ctx.lineTo(-92,240); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = 'rgba(110,231,183,0.25)'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(-34,150); ctx.quadraticCurveTo(0,168,34,150); ctx.stroke();
+
+    /* face */
+    const faceG = ctx.createLinearGradient(0,-150,0,120);
+    faceG.addColorStop(0,'#fbd6b4'); faceG.addColorStop(0.5,'#f5c7a2'); faceG.addColorStop(1,'#e9b48f');
+    ctx.fillStyle = faceG;
+    ctx.beginPath();
+    ctx.moveTo(0,-152);
+    ctx.bezierCurveTo(104,-150,126,-92,122,-24);
+    ctx.bezierCurveTo(118,44,78,108,0,118);
+    ctx.bezierCurveTo(-78,108,-118,44,-122,-24);
+    ctx.bezierCurveTo(-126,-92,-104,-150,0,-152);
+    ctx.closePath(); ctx.fill();
+
+    /* ears */
+    ctx.fillStyle = '#e9b48f';
+    ctx.beginPath(); ctx.ellipse(-118,2,13,20,0,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(118,2,13,20,0,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#dda07c';
+    ctx.beginPath(); ctx.ellipse(-118,4,6,10,0,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(118,4,6,10,0,0,Math.PI*2); ctx.fill();
+
+    /* blush */
+    ctx.fillStyle = 'rgba(230,120,120,0.28)';
+    ctx.beginPath(); ctx.ellipse(-66,26,20,11,0,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(66,26,20,11,0,0,Math.PI*2); ctx.fill();
+
+    /* brows */
+    ctx.strokeStyle = '#3a2618'; ctx.lineWidth = 4; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(-70,-62); ctx.quadraticCurveTo(-46,-76,-28,-66); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(28,-66); ctx.quadraticCurveTo(46,-76,70,-62); ctx.stroke();
+
+    /* eyes */
+    eye(-46,-18,eyeOpen);
+    eye(46,-18,eyeOpen);
+
+    /* nose */
+    ctx.strokeStyle = 'rgba(170,105,75,0.55)'; ctx.lineWidth = 2.4;
+    ctx.beginPath(); ctx.moveTo(0,2); ctx.quadraticCurveTo(10,12,6,26); ctx.stroke();
+    ctx.fillStyle = 'rgba(170,105,75,0.35)';
+    ctx.beginPath(); ctx.ellipse(10,24,6,3.4,-0.4,0,Math.PI*2); ctx.fill();
+
+    /* lips (lip-sync) */
+    mouthY(0,52,mouth);
+
+    /* fringe — soft layered bangs with center part */
+    ctx.fillStyle = '#2a1f18';
+    ctx.beginPath();
+    ctx.moveTo(-126,-86);
+    ctx.bezierCurveTo(-112,-150,-40,-158,0,-150);
+    ctx.bezierCurveTo(34,-156,100,-150,126,-86);
+    ctx.bezierCurveTo(104,-108,74,-120,44,-112);
+    ctx.bezierCurveTo(16,-120,-4,-104,-16,-118);
+    ctx.bezierCurveTo(-40,-112,-88,-108,-126,-86);
+    ctx.closePath(); ctx.fill();
+    /* center part strands */
+    ctx.beginPath();
+    ctx.moveTo(0,-150);
+    ctx.bezierCurveTo(-2,-120,14,-104,26,-120);
+    ctx.bezierCurveTo(12,-134,4,-142,0,-150);
+    ctx.closePath(); ctx.fill();
+    /* side locks */
+    ctx.beginPath();
+    ctx.moveTo(-122,-70);
+    ctx.bezierCurveTo(-140,-30,-138,40,-118,120);
+    ctx.bezierCurveTo(-112,92,-112,40,-116,-70);
+    ctx.closePath(); ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(122,-70);
+    ctx.bezierCurveTo(140,-30,138,40,118,120);
+    ctx.bezierCurveTo(112,92,112,40,116,-70);
+    ctx.closePath(); ctx.fill();
+    /* hair shine */
+    ctx.strokeStyle = 'rgba(255,200,140,0.18)'; ctx.lineWidth = 6; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(-58,-130); ctx.quadraticCurveTo(-70,-60,-58,10); ctx.stroke();
+
+    ctx.restore();
+  }
+  return { ready: () => true, start, stop, setSpeaking, blip };
+})();
+window.KVGirl = KVGirl;
+
+/* ================= PHOTOREALISTIC AVATAR (generated, cached) ================= */
+const AVATAR_KEY = 'karvion_real_avatar_v1';
+function getRealAvatar() {
+  try { return localStorage.getItem(AVATAR_KEY) || ''; } catch(e) { return ''; }
+}
+function setRealAvatar(dataUrl) {
+  try { localStorage.setItem(AVATAR_KEY, dataUrl); } catch(e) {}
+}
+async function loadRealAvatar() {
+  const img = document.getElementById('realAvatar');
+  const canvas = document.getElementById('avatarCanvas');
+  if (!img || !canvas) return;
+  const cached = getRealAvatar();
+  if (cached) { showRealAvatar(cached); return; }
+  if (!CONFIG.CLOUDFLARE || /YOUR-ACCOUNT/.test(CONFIG.CLOUDFLARE)) return;
+  try {
+    const prompt = 'Photorealistic 4K portrait of a beautiful young Indian woman AI assistant, warm confident smile, dark hair, professional soft studio lighting, dark green background, facing camera, ultra realistic skin, shallow depth of field, professional photography';
+    const res = await fetch(CONFIG.CLOUDFLARE + 'ai-image', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ prompt }), signal: AbortSignal.timeout(60000)
+    });
+    if (!res.ok) return;
+    const data = await res.json();
+    const b64 = data && (data.image || (data.result && data.result.image));
+    if (!b64) return;
+    const mime = data.mimeType || 'image/jpeg';
+    const dataUrl = b64.indexOf('data:') === 0 ? b64 : `data:${mime};base64,${b64}`;
+    setRealAvatar(dataUrl);
+    showRealAvatar(dataUrl);
+  } catch(e) { console.warn('Real avatar gen failed:', e.message); }
+}
+function showRealAvatar(dataUrl) {
+  const img = document.getElementById('realAvatar');
+  const canvas = document.getElementById('avatarCanvas');
+  if (!img) return;
+  img.src = dataUrl;
+  img.style.display = 'block';
+  if (canvas) canvas.style.display = 'none';
+}
+function hideRealAvatar() {
+  const img = document.getElementById('realAvatar');
+  const canvas = document.getElementById('avatarCanvas');
+  if (img) img.style.display = 'none';
+  if (canvas) canvas.style.display = 'block';
+}
+function setAvatarSpeaking(b) {
+  const orb = document.getElementById('vmOrb');
+  if (orb && orb.style.display !== 'none') {
+    orb.classList.toggle('speaking', !!b);
+    if (b) { orb.classList.add('blip'); setTimeout(()=>orb.classList.remove('blip'), 350); }
+  }
+}
+function avatarBlip() {
+  const orb = document.getElementById('vmOrb');
+  if (orb && orb.style.display !== 'none') {
+    orb.classList.remove('blip');
+    void orb.offsetWidth;
+    orb.classList.add('blip');
+    setTimeout(()=>orb.classList.remove('blip'), 340);
+  }
+}
+
+/* ================= STREAMING LOW-LATENCY TTS ================= */
+/* Speaks sentence-by-sentence as tokens arrive — no waiting for the full paragraph. */
+const streamVoiceQueue = {
+  buffer:'', queue:[], busy:false, ended:false, flushTimer:null,
+  push(txt){
+    if (!voiceActive || !txt) return;
+    this.buffer += txt;
+    clearTimeout(this.flushTimer);
+    this.flushTimer = setTimeout(() => this.flush(), 600);
+  },
+  finish(){ this.ended = true; clearTimeout(this.flushTimer); this.flush(); },
+  flush(){
+    if (!voiceActive){ this.buffer=''; this.queue=[]; return; }
+    const re = /[^.!?\n\u0964]+[.!?\n\u0964]+/g;
+    let m; const done=[];
+    while ((m = re.exec(this.buffer))) done.push(m[0].trim());
+    if (done.length){
+      this.buffer = this.buffer.replace(re,'');
+      const ready = [];
+      let chunk = '';
+      for (const part of done){
+        chunk = (chunk + ' ' + part).trim();
+        if (chunk.length >= 110 || this.ended){ ready.push(chunk); chunk = ''; }
+      }
+      if (this.ended && chunk){ ready.push(chunk); chunk = ''; }
+      if (chunk && !this.ended) this.buffer = chunk + ' ' + this.buffer;
+      if (ready.length) this.queue.push(...ready);
+    }
+    if (this.ended && this.buffer.trim()){ this.queue.push(this.buffer.trim()); this.buffer=''; }
+    this.pump();
+  },
+  pump(){
+    if (this.busy || !this.queue.length || !voiceActive) return;
+    const text = this.queue.shift();
+    const clean = (text||'').replace(/[#*`>_]/g,'').replace(/\s+/g,' ').trim();
+    if (!clean){ this.pump(); return; }
+    if (gTTS.enabled()) {
+      this.busy = true;
+      setVoiceStatus('Speaking…');
+      setWaveMode('speaking');
+      gTTS.play(clean.slice(0,4800),
+        () => { if (window.KVGirl) KVGirl.setSpeaking(true); setAvatarSpeaking(true); },
+        () => { if (window.KVGirl) KVGirl.blip(); avatarBlip(); },
+        () => { this.busy = false; if (window.KVGirl) KVGirl.setSpeaking(false); setAvatarSpeaking(false); this.pump(); }
+      );
+      return;
+    }
+    if (gtTTS.enabled()) {
+      this.busy = true;
+      setVoiceStatus('Speaking…');
+      setWaveMode('speaking');
+      gtTTS.play(clean.slice(0,4800),
+        () => { if (window.KVGirl) KVGirl.setSpeaking(true); setAvatarSpeaking(true); },
+        () => { if (window.KVGirl) KVGirl.blip(); avatarBlip(); },
+        () => { this.busy = false; if (window.KVGirl) KVGirl.setSpeaking(false); setAvatarSpeaking(false); this.pump(); }
+      );
+      return;
+    }
+    const synth = window.speechSynthesis;
+    if (!synth){ this.pump(); return; }
+    const utt = new SpeechSynthesisUtterance(clean.slice(0,400));
+    const voice = pickVoice(clean);
+    if (voice){ utt.voice = voice; utt.lang = voice.lang || 'en-IN'; }
+    utt.rate = (typeof PREFS!=='undefined' && PREFS.rate) ? PREFS.rate : 1;
+    utt.pitch = (typeof PREFS!=='undefined' && PREFS.pitch) ? PREFS.pitch : 1;
+    this.busy = true;
+    setVoiceStatus('Speaking…');
+    setWaveMode('speaking');
+    utt.onstart = () => { if (window.KVGirl) KVGirl.setSpeaking(true); setAvatarSpeaking(true); };
+    utt.onboundary = () => { if (window.KVGirl) KVGirl.blip(); avatarBlip(); };
+    utt.onend = () => { this.busy = false; if (window.KVGirl) KVGirl.setSpeaking(false); setAvatarSpeaking(false); this.pump(); };
+    utt.onerror = () => { this.busy = false; if (window.KVGirl) KVGirl.setSpeaking(false); setAvatarSpeaking(false); this.pump(); };
+    synth.speak(utt);
+  },
+  stop(){ clearTimeout(this.flushTimer); this.queue=[]; this.buffer=''; this.busy=false; this.ended=false; if (window.speechSynthesis) window.speechSynthesis.cancel(); if (window.KVGirl) KVGirl.setSpeaking(false); }
+};
+
+/* ————— VOICE CHAT MODE (live conversational loop) ————— */
+let voiceRec = null, voiceFinalLock = false, voiceActive = false, voiceLang = 'en';
+
+function setWaveMode(m){
+  const wave = $('vmWave');
+  if (!wave) return;
+  wave.classList.toggle('listening', m==='listening');
+  wave.classList.toggle('speaking', m==='speaking');
+}
+
+/* ————— LIVE CAMERA (Gemini-Live style vision) ————— */
+let camStream = null, camTimer = null, camActive = false;
+
+function toggleCamera() {
+  if (camActive) { stopCamera(); return; }
+  const v = $('vmCamVideo');
+  if (!v) return;
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return toast('Camera not supported in this browser','error');
+  navigator.mediaDevices.getUserMedia({ video: { width: { ideal: 1280 }, height: { ideal: 720 } }, audio: false })
+    .then(stream => {
+      camStream = stream; camActive = true;
+      v.srcObject = stream; v.play().catch(()=>{}); v.classList.add('show');
+      const btn = $('vmCamBtn'); if (btn) btn.classList.add('active');
+      setVoiceStatus('Camera ON — I can see you');
+      toast('Camera on','success');
+      snapCamera();
+      camTimer = setInterval(snapCamera, 500);
+    })
+    .catch(() => { camActive = false; toast('Camera permission denied','error'); });
+}
+
+function snapCamera() {
+  if (!camActive || !camStream) return;
+  const v = $('vmCamVideo');
+  if (!v || v.readyState < 2) return;
+  let cv = $('vmCamCanvas');
+  if (!cv) { cv = document.createElement('canvas'); cv.id = 'vmCamCanvas'; cv.width = 640; cv.height = 360; cv.style.display = 'none'; document.body.appendChild(cv); }
+  try { cv.getContext('2d').drawImage(v, 0, 0, cv.width, cv.height); } catch(e) { return; }
+  APP.camFrame = cv.toDataURL('image/jpeg', 0.65);
+}
+
+function stopCamera() {
+  camActive = false;
+  if (camTimer) { clearInterval(camTimer); camTimer = null; }
+  if (camStream) { camStream.getTracks().forEach(t => t.stop()); camStream = null; }
+  const v = $('vmCamVideo'); if (v) { v.srcObject = null; v.classList.remove('show'); }
+  const btn = $('vmCamBtn'); if (btn) btn.classList.remove('active');
+  if (voiceActive) setVoiceStatus('Listening… speak now');
+}
+
+function toggleVoiceMode() {
+  if (voiceActive) { stopVoiceMode(); return; }
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) return toast('Voice chat needs Chrome/Edge with mic permission','error');
+  voiceActive = true;
+  APP.imageMode = false;
+  if (typeof gtTTS !== 'undefined' && gtTTS.prime) gtTTS.prime();
+  const btn = $('voiceChatBtn'); if (btn) btn.classList.add('active');
+  const card = $('voiceModeCard'); if (card) card.classList.add('show');
+  const orb = $('vmOrb');
+  if (orb) { orb.style.display = 'flex'; orb.classList.remove('speaking','blip'); }
+  const c = $('avatarCanvas'); if (c) c.style.display = 'none';
+  const rimg = $('realAvatar'); if (rimg) rimg.style.display = 'none';
+  setVoiceStatus('Listening… speak now');
+  updateVoiceTranscript('');
+  setWaveMode('listening');
+  startVoiceListen();
+  toast('Voice chat ON — just talk','success');
+}
+
+function stopVoiceMode() {
+  voiceActive = false;
+  if (voiceRec) { try { voiceRec.stop(); } catch(e){} voiceRec = null; }
+  voiceFinalLock = false;
+  streamVoiceQueue.stop();
+  const btn = $('voiceChatBtn'); if (btn) btn.classList.remove('active');
+  const card = $('voiceModeCard'); if (card) card.classList.remove('show');
+  KVGirl.stop();
+  stopCamera();
+  const orb = $('vmOrb'); if (orb) { orb.style.display = 'none'; orb.classList.remove('speaking','blip'); }
+  setWaveMode('');
+  toast('Voice chat OFF','info');
+}
+
+function setVoiceStatus(t) { const el = $('vmStatus'); if (el) el.textContent = t; }
+function updateVoiceTranscript(t) { const el = $('vmTranscript'); if (el) el.textContent = t; }
+
+function startVoiceListen() {
+  if (!voiceActive || voiceRec) return;
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) return stopVoiceMode();
+  voiceRec = new SR();
+  voiceRec.lang = voiceLang === 'hi' ? 'hi-IN' : 'en-US';
+  voiceRec.interimResults = true;
+  voiceRec.continuous = false;
+  voiceRec.onresult = e => {
+    let final = '', interim = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      const r = e.results[i];
+      if (r.isFinal) final += r[0].transcript; else interim += r[0].transcript;
+    }
+    updateVoiceTranscript((final || interim).trim());
+    if (final && !voiceFinalLock && !APP.isLoading) {
+      voiceFinalLock = true;
+      voiceSend(final.trim());
+    }
+  };
+  voiceRec.onend = () => { voiceRec = null; if (voiceActive && !APP.isLoading && !voiceFinalLock) startVoiceListen(); };
+  voiceRec.onerror = ev => {
+    voiceRec = null;
+    if (ev.error === 'not-allowed' || ev.error === 'service-not-allowed') {
+      stopVoiceMode(); toast('Microphone access blocked','error');
+    } else if (voiceActive && !voiceFinalLock) { setTimeout(startVoiceListen, 300); }
+  };
+  voiceRec.start();
+}
+
+async function voiceSend(text) {
+  const ta = $('userInput');
+  ta.value = text; handleInputChange(ta);
+  if (camActive && APP.camFrame) APP.voiceCamFrame = APP.camFrame;
+  setVoiceStatus('Thinking…');
+  updateVoiceTranscript('You: ' + text);
+  await sendMessage();
+  const lastMsg = (APP.chats[APP.currentChatId].messages||[]).slice(-1)[0];
+  if (lastMsg && lastMsg.role === 'ai' && lastMsg.content) voiceLang = detectLang(lastMsg.content);
+  const streaming = (typeof PREFS==='undefined' || PREFS.streaming);
+  if (!streaming) {
+    const chat = APP.chats[APP.currentChatId];
+    const last = (chat.messages||[]).slice(-1)[0];
+    if (last && last.role === 'ai' && last.content) streamVoiceQueue.push(last.content);
+  }
+  streamVoiceQueue.finish();
+  while (voiceActive && (streamVoiceQueue.busy || streamVoiceQueue.queue.length)) {
+    await new Promise(r => setTimeout(r, 120));
+  }
+  voiceFinalLock = false;
+  if (voiceActive) { setVoiceStatus('Listening…'); setWaveMode('listening'); startVoiceListen(); }
+}
+
+/* â”€â”€â”€ UTILITIES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+function copyCode(btn) {
+  const code = btn.closest('.code-block').querySelector('pre code')?.textContent||'';
+  navigator.clipboard.writeText(code).then(()=>{ btn.innerHTML='<i class="fa-solid fa-check"></i> Copied!'; setTimeout(()=>btn.innerHTML='<i class="fa-solid fa-copy"></i> Copy',2000); });
+}
+function toggleHtmlPreview(btn) {
+  const block = btn.closest('.code-block');
+  let pv = block.nextElementSibling;
+  if (pv && pv.classList.contains('live-preview')) {
+    pv.remove();
+    btn.innerHTML = '<i class="fa-solid fa-eye"></i> Live Preview';
+    return;
+  }
+  const code = block.querySelector('pre code')?.textContent || '';
+  const name = (btn.closest('.msg-content')?.querySelector('.msg-name')?.textContent||'Karvion').trim();
+  pv = document.createElement('div');
+  pv.className = 'live-preview';
+  pv.innerHTML = `
+    <div class="live-preview-header">
+      <span><i class="fa-solid fa-eye"></i> Live Preview</span>
+      <div style="display:flex;gap:6px">
+        <button class="code-copy-btn" onclick="reloadHtmlPreview(this)"><i class="fa-solid fa-rotate"></i> Reload</button>
+        <button class="code-copy-btn" onclick="openPreviewFull(this)"><i class="fa-solid fa-up-right-from-square"></i> Open</button>
+      </div>
+    </div>`;
+  const iframe = document.createElement('iframe');
+  iframe.sandbox = 'allow-scripts allow-same-origin allow-modals allow-forms';
+  iframe.srcdoc = code;
+  pv.appendChild(iframe);
+  block.insertAdjacentElement('afterend', pv);
+  btn.innerHTML = '<i class="fa-solid fa-eye-slash"></i> Hide Preview';
+}
+function reloadHtmlPreview(btn) {
+  const iframe = btn.closest('.live-preview')?.querySelector('iframe');
+  if (!iframe) return;
+  const src = iframe.srcdoc;
+  iframe.srcdoc = '';
+  requestAnimationFrame(() => { iframe.srcdoc = src; });
+}
+function openPreviewFull(btn) {
+  const iframe = btn.closest('.live-preview')?.querySelector('iframe');
+  if (!iframe) return;
+  const win = window.open('', '_blank');
+  win.document.open();
+  win.document.write(iframe.srcdoc);
+  win.document.close();
+}
+function copyError(btn) {
+  const msg = btn.closest('.error-block').querySelector('.error-msg')?.textContent||'';
+  navigator.clipboard.writeText(msg).then(()=>{ btn.innerHTML='<i class="fa-solid fa-check"></i> Copied!'; setTimeout(()=>btn.innerHTML='<i class="fa-solid fa-copy"></i> Copy',2000); });
+}
+function toggleSidebar(show) {
+  $('sidebar').classList.toggle('hidden', !show);
+  $('sidebarBackdrop').classList.toggle('show', show);
+}
+
+/* === SETTINGS & PREFS === */
+const PREFS_KEY = 'karvion_prefs';
+const PREFS_DEFAULTS = {
+  theme: 'Emerald',
+  fontSize: 'md',
+  showTime: true,
+  reducedMotion: false,
+  sounds: true,
+  defaultImageMode: false,
+  streaming: true,
+  autoTitle: true,
+  autoRead: false,
+  autoDownloadImage: true,
+  rate: 1,
+  pitch: 1
+};
+let PREFS = { ...PREFS_DEFAULTS };
+const SET_SWITCH_IDS = { showTime:'setShowTime', reducedMotion:'setReducedMotion', sounds:'setSounds', defaultImageMode:'setImageMode', streaming:'setStreaming', autoTitle:'setAutoTitle', autoRead:'setAutoRead' };
+const FONT_SIZES = { sm:'13px', md:'14px', lg:'16px' };
+
+function loadPrefs() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(PREFS_KEY) || '{}');
+    PREFS = { ...PREFS_DEFAULTS, ...saved };
+  } catch(e) { PREFS = { ...PREFS_DEFAULTS }; }
+  APP.imageMode = !!PREFS.defaultImageMode;
+  applyPrefs();
+}
+
+function savePrefs() {
+  try { localStorage.setItem(PREFS_KEY, JSON.stringify(PREFS)); } catch(e){}
+}
+
+function applyPrefs() {
+  document.documentElement.style.setProperty('--msg-fs', FONT_SIZES[PREFS.fontSize] || FONT_SIZES.md);
+  document.documentElement.classList.toggle('reduce-motion', !!PREFS.reducedMotion);
+  document.querySelectorAll('#fontSizeSeg button').forEach(b => b.classList.toggle('active', b.dataset.v === PREFS.fontSize));
+  for (const k in SET_SWITCH_IDS) {
+    const el = document.getElementById(SET_SWITCH_IDS[k]);
+    if (el) el.checked = !!PREFS[k];
+  }
+  const rate = $('setRate'), pitch = $('setPitch');
+  if (rate) rate.value = PREFS.rate;
+  if (pitch) pitch.value = PREFS.pitch;
+  if ($('rateLabel')) $('rateLabel').textContent = PREFS.rate.toFixed(1) + 'Ã—';
+  if ($('pitchLabel')) $('pitchLabel').textContent = PREFS.pitch.toFixed(1);
+  const imgBtn = $('imageToggleBtn');
+  if (imgBtn) imgBtn.classList.toggle('active', APP.imageMode);
+}
+
+function setPref(key, value, rerender) {
+  PREFS[key] = value;
+  if (key === 'defaultImageMode') APP.imageMode = !!value;
+  savePrefs();
+  applyPrefs();
+  if (rerender) { renderMessages(); updateSyncPill(); }
+}
+
+function setFontSize(v) {
+  PREFS.fontSize = v;
+  savePrefs();
+  applyPrefs();
+  renderMessages();
+}
+
+function setRate(v) {
+  PREFS.rate = parseFloat(v);
+  if ($('rateLabel')) $('rateLabel').textContent = v + 'Ã—';
+  savePrefs();
+}
+
+function setPitch(v) {
+  PREFS.pitch = parseFloat(v);
+  if ($('pitchLabel')) $('pitchLabel').textContent = v;
+  savePrefs();
+}
+
+function playSound(kind) {
+  if (!PREFS.sounds) return;
+  try {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return;
+    if (!playSound.ctx) playSound.ctx = new AC();
+    const ctx = playSound.ctx;
+    const osc = ctx.createOscillator(), gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.value = kind === 'error' ? 190 : kind === 'send' ? 720 : 540;
+    gain.gain.setValueAtTime(0.001, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.12, ctx.currentTime + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.start(); osc.stop(ctx.currentTime + 0.18);
+  } catch(e){}
+}
+
+function openSettings() {
+  renderThemeGrid();
+  applyPrefs();
+  updateSyncPill();
+  $('settingsOverlay').classList.add('show');
+}
+
+function closeSettings() {
+  $('settingsOverlay').classList.remove('show');
+}
+
+function renderThemeGrid() {
+  const grid = $('themeGrid');
+  if (!grid) return;
+  const current = (window.KarvionThemes && KarvionThemes.current()) || { name: PREFS_DEFAULTS.theme };
+  grid.innerHTML = (window.KarvionThemes ? KarvionThemes.list : [{ name:'Purple', bg:'#0d0716', primary:'#a78bfa', accent:'#ddd6fe' }]).map(t => {
+    const active = t.name === current.name ? ' active' : '';
+    return `<div class="theme-item${active}" data-theme="${t.name}" onclick="selectTheme('${t.name}')">
+      <div class="theme-swatch" style="background:linear-gradient(135deg, ${t.bg} 0%, ${t.primary} 70%, ${t.accent} 100%)"></div>
+      <div class="theme-name">${t.name}</div>
+    </div>`;
+  }).join('');
+}
+
+function selectTheme(name) {
+  if (!window.KarvionThemes) return;
+  KarvionThemes.apply(name);
+  PREFS.theme = name;
+  savePrefs();
+  renderThemeGrid();
+  toast('Theme: ' + name, 'success', 1800);
+}
+
+function resetSettings() {
+  PREFS = { ...PREFS_DEFAULTS };
+  localStorage.removeItem(PREFS_KEY);
+  if (window.KarvionThemes) KarvionThemes.apply(PREFS_DEFAULTS.theme);
+  APP.imageMode = false;
+  savePrefs();
+  applyPrefs();
+  renderMessages();
+  toast('Settings restored to defaults', 'success');
+}
+
+function clearLocalCache() {
+  let n = 0;
+  Object.keys(localStorage).filter(k => k.startsWith('karvion_sync_')).forEach(k => { localStorage.removeItem(k); n++; });
+  toast(n ? 'Local chat cache cleared (' + n + ' entries)' : 'No local cache found', n ? 'success' : 'info');
+}
+
+/* â”€â”€â”€ INIT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+window.switchAuthTab = switchAuthTab;
+window.submitAuth = submitAuth;
+window.signInWithGoogle = signInWithGoogle;
+window.signOutUser = signOutUser;
+window.startNewChat = startNewChat;
+window.loadChat = loadChat;
+window.deleteChat = deleteChat;
+window.selectModel = selectModel;
+window.selectPersona = selectPersona;
+window.toggleDropdown = toggleDropdown;
+window.renderChatList = renderChatList;
+window.handleInputChange = handleInputChange;
+window.handleKeydown = handleKeydown;
+window.useQuickPrompt = useQuickPrompt;
+window.sendMessage = sendMessage;
+window.toggleVoiceInput = toggleVoiceInput;
+window.toggleVoiceMode = toggleVoiceMode;
+window.toggleImageMode = toggleImageMode;
+window.handleFiles = handleFiles;
+window.removeFile = removeFile;
+window.copyCode = copyCode;
+window.copyError = copyError;
+window.copyMessage = copyMessage;
+window.deleteMessage = deleteMessage;
+window.regenMessage = regenMessage;
+window.speakMessage = speakMessage;
+window.exportChat = exportChat;
+window.renameChat = renameChat;
+window.clearChat = clearChat;
+window.openImageViewer = openImageViewer;
+window.toggleSidebar = toggleSidebar;
+window.openSettings = openSettings;
+window.closeSettings = closeSettings;
+window.setPref = setPref;
+window.setFontSize = setFontSize;
+window.setRate = setRate;
+window.setPitch = setPitch;
+window.selectTheme = selectTheme;
+window.resetSettings = resetSettings;
+window.clearLocalCache = clearLocalCache;
+
+loadPrefs();
+renderQuickPrompts();
+renderWelcomeModels();
+renderModelDropdown();
+renderPersonaDropdown();
+updateSyncPill();
+$('modelBtnLabel').textContent = (MODELS.find(m=>m.id===APP.model)||MODELS[0]).name;
+$('modelBtnProvider').textContent = (MODELS.find(m=>m.id===APP.model)||MODELS[0]).provider.toUpperCase();
+$('personaBtnLabel').textContent = 'Karvion';
+if (fba) {
+  fba.onAuthStateChanged(user => {
+    if (user && !APP.authReady) enterApp(user);
+    else if (!user && APP.authReady) {
+      APP.authReady = false;
+      APP.uid = null;
+      $('app').style.display = 'none';
+      $('authOverlay').classList.add('show');
+    }
+  });
+}
+</script>
+
+<!-- AD WATCH POPUP -->
+<style>
+  .adwatch-overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:99999;display:none;align-items:center;justify-content:center}
+  .adwatch-overlay.show{display:flex}
+  .adwatch-card{background:var(--bg,#ffffff);color:var(--text,#1a1a2e);border:1px solid var(--border,rgba(0,0,0,.15));border-radius:16px;padding:24px;width:92%;max-width:400px;text-align:center;box-shadow:0 24px 70px rgba(0,0,0,.45)}
+  .adwatch-card h3{margin:0 0 6px;font-size:1.05rem}
+  .adwatch-card p{margin:0 0 16px;font-size:.88rem;opacity:.75}
+  .adwatch-slot{margin:10px auto;display:flex;justify-content:center;overflow:hidden}
+  .adwatch-status{margin-top:12px;font-size:.9rem;font-weight:600}
+  .adwatch-count{color:#7c5cff;font-weight:700}
+  .adwatch-btn{margin-top:14px;padding:10px 28px;border:0;border-radius:9px;background:#7c5cff;color:#fff;font-size:.92rem;font-weight:700;cursor:not-allowed;opacity:.45;transition:opacity .2s}
+  .adwatch-btn.ready{cursor:pointer;opacity:1}
+  .adwatch-btn.ready:hover{filter:brightness(1.1)}
+</style>
+<div class="adwatch-overlay" id="adwatchOverlay" role="dialog" aria-modal="true">
+  <div class="adwatch-card">
+    <h3>Please watch these ads</h3>
+    <p>This helps keep KarvionAI free forever. Thank you for your support!</p>
+    <div class="adwatch-slot">
+      <div class="ad-slot" style="margin:0">
+        <iframe style="border:0;display:block;width:300px;height:250px;max-width:100%" srcdoc='<!DOCTYPE html><html><head><style>html,body{margin:0;padding:0}</style></head><body style="margin:0;padding:0"><script>atOptions={"key":"7c8e8d92ef420649c7c32cd9c3e59cc5","format":"iframe","height":250,"width":300,"params":{}};</script><script>(function(){var s=document.createElement("script");s.src="https://www.highperformanceformat.com/7c8e8d92ef420649c7c32cd9c3e59cc5/invoke.js";document.currentScript&&document.currentScript.parentNode&&document.currentScript.parentNode.insertBefore(s,document.currentScript.nextSibling);})();</script></body></html>'></iframe>
+      </div>
+    </div>
+    <div class="adwatch-slot">
+      <div class="ad-slot" style="margin:0">
+        <iframe style="border:0;display:block;width:468px;height:60px;max-width:100%" srcdoc='<!DOCTYPE html><html><head><style>html,body{margin:0;padding:0}</style></head><body style="margin:0;padding:0"><script>atOptions={"key":"0944738f2e790256d713dde733e75532","format":"iframe","height":60,"width":468,"params":{}};</script><script>(function(){var s=document.createElement("script");s.src="https://www.highperformanceformat.com/0944738f2e790256d713dde733e75532/invoke.js";document.currentScript&&document.currentScript.parentNode&&document.currentScript.parentNode.insertBefore(s,document.currentScript.nextSibling);})();</script></body></html>'></iframe>
+      </div>
+    </div>
+    <div class="adwatch-status">Continue in <span class="adwatch-count" id="adwatchCount">15</span>s</div>
+    <button class="adwatch-btn" id="adwatchBtn" disabled>Continue</button>
+  </div>
+</div>
+<script>
+(function () {
+  var INTERVAL = 5 * 60 * 1000;
+  var WATCH = 15;
+  var overlay = document.getElementById('adwatchOverlay');
+  var btn = document.getElementById('adwatchBtn');
+  var countEl = document.getElementById('adwatchCount');
+  if (!overlay || !btn || !countEl) return;
+  var store = {
+    get: function () { try { return localStorage.getItem('karvionAdWatch') || '0'; } catch (e) { return '0'; } },
+    set: function (v) { try { localStorage.setItem('karvionAdWatch', v); } catch (e) {} }
+  };
+  function showPopup() {
+    overlay.classList.add('show');
+    var remaining = WATCH;
+    countEl.textContent = remaining;
+    btn.disabled = true;
+    btn.classList.remove('ready');
+    var t = setInterval(function () {
+      remaining--;
+      if (remaining <= 0) {
+        clearInterval(t);
+        countEl.textContent = '0';
+        btn.disabled = false;
+        btn.classList.add('ready');
+      } else {
+        countEl.textContent = remaining;
+      }
+    }, 1000);
+  }
+  function schedule() {
+    var now = Date.now();
+    var last = parseInt(store.get(), 10) || 0;
+    var due = last ? Math.max(1000, last + INTERVAL - now) : INTERVAL;
+    setTimeout(function () {
+      showPopup();
+      store.set(String(Date.now()));
+      schedule();
+    }, due);
+  }
+  btn.addEventListener('click', function () {
+    overlay.classList.remove('show');
+    schedule();
+  });
+  schedule();
+})();
+</script>
+
+</body>
+</html>
